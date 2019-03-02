@@ -1,0 +1,44 @@
+本地通知相关设置
+//设置本地通知样式
+
+public void setBuilderId(long)
+
+//设置本地通知的 title
+
+public void setTitle(String paramString)
+
+//设置本地通知的 content
+
+public void setContent(String paramString)
+
+//设置额外的数据信息 extras 为 json 字符串
+
+public void setExtras(String extras)
+
+//设置本地通知的 ID
+
+public void setNotificationId(long notificationId)
+
+//设置本地通知触发时间
+
+public void setBroadcastTime(long broadCastTime)
+
+public void setBroadcastTime(Date date)
+
+public void setBroadcastTime(int year, int month, int day, int hour, int minute, int second)
+
+
+示例代码
+JPushLocalNotification ln = new JPushLocalNotification();
+ln.setBuilderId(0);
+ln.setContent("hhh");
+ln.setTitle("ln");
+ln.setNotificationId(11111111) ;
+ln.setBroadcastTime(System.currentTimeMillis() + 1000 * 60 * 10);
+
+Map<String , Object> map = new HashMap<String, Object>() ;
+map.put("name", "jpush") ;
+map.put("test", "111") ;
+JSONObject json = new JSONObject(map) ;
+ln.setExtras(json.toString()) ;
+JPushInterface.addLocalNotification(getApplicationContext(), ln);
