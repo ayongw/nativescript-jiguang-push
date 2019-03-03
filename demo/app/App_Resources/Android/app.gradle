@@ -8,7 +8,12 @@
 android {  
   defaultConfig {  
     generatedDensities = []
-    applicationId = "org.nativescript.demo"  
+    applicationId = "org.nativescript.demo"
+    manifestPlaceholders = [
+        JPUSH_PKGNAME : applicationId,
+        JPUSH_APPKEY : "你的 Appkey ", //JPush 上注册的包名对应的 Appkey.
+        JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+    ]
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  

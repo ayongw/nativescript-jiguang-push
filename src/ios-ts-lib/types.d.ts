@@ -301,8 +301,10 @@ declare class JPushNotificationRequest extends NSObject implements NSCoding, NSC
 }
 
 
-declare class JPUSHRegisterDelegate extends NSObject {
+declare interface JPUSHRegisterDelegate extends NSObject {
     /**
+     *
+     *  - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger options))completionHandler;
      *
      * @brief handle UserNotifications.framework [willPresentNotification:withCompletionHandler:]
      *
@@ -316,7 +318,12 @@ declare class JPUSHRegisterDelegate extends NSObject {
 
 
     /**
-     * @brief handle UserNotifications.framework [didReceiveNotificationResponse:withCompletionHandler:]
+     * handle UserNotifications.framework [didReceiveNotificationResponse:withCompletionHandler:]
+     *
+     * - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center
+     *          didReceiveNotificationResponse:(UNNotificationResponse *)response
+     *          withCompletionHandler:(void(^)())completionHandler;
+     *
      * @param center [UNUserNotificationCenter currentNotificationCenter] 新特性用户通知中心
      * @param response 通知响应对象
      * @param completionHandler
@@ -324,7 +331,15 @@ declare class JPUSHRegisterDelegate extends NSObject {
     jpushNotificationCenter(center: UNUserNotificationCenter,
                             response: UNNotificationResponse,
                             completionHandler: () => void): void;
+    /**
+     * handle UserNotifications.framework [openSettingsForNotification:]
+     *
+     * @param center [UNUserNotificationCenter currentNotificationCenter] 新特性用户通知中心
+     * @param notification 当前管理的通知对象
+     */
+    jpushNotificationCenter(center: UNUserNotificationCenter, notification: UNNotification): void;
 }
+
 
 // JPUSHTagsOperationCompletion
 // typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
@@ -335,7 +350,7 @@ declare class JPUSHRegisterDelegate extends NSObject {
 // JPUSHAliasOperationCompletion
 // typedef void (^JPUSHAliasOperationCompletion)(NSInteger iResCode, NSString *iAlias, NSInteger seq);
 
-export declare function JPUSHTagsOperationCompletion(iResCode: number, iTags: NSSet, seq: number): void;
+// export declare function JPUSHTagsOperationCompletion(iResCode: number, iTags: NSSet, seq: number): void;
 
 
 /**
@@ -613,6 +628,8 @@ export declare class JPUSHService extends NSObject {
      * --iOS10以下还可继续使用，
      * iOS10以上在[UNUserNotificationCenterDelegate willPresentNotification:withCompletionHandler:]
      * 方法中调用completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);即可
+     *
+     * @deprecated JPush 2.1.9 版本已过期
      */
     public static showLocalNotificationAtFront(notification: UILocalNotification, notificationKey: string): void;
 
