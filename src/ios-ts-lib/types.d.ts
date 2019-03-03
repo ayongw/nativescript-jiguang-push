@@ -1,3 +1,72 @@
+declare const JPUSH_VERSION_NUMBER;
+/**
+ * 正在连接中
+ */
+declare const kJPFNetworkIsConnectingNotification: string;
+/**
+ * 建立连接
+ */
+declare const kJPFNetworkDidSetupNotification: string;
+/**
+ * 关闭连接
+ */
+declare const kJPFNetworkDidCloseNotification: string;
+/**
+ * 注册成功
+ */
+declare const kJPFNetworkDidRegisterNotification: string;
+/**
+ * 注册失败
+ */
+declare const kJPFNetworkFailedRegisterNotification: string;
+/**
+ * 登录成功
+ */
+declare const kJPFNetworkDidLoginNotification: string;
+/**
+ * 收到消息(非APNS)
+ */
+declare const kJPFNetworkDidReceiveMessageNotification: string;
+/**
+ * 错误提示
+ */
+declare const kJPFServiceErrorNotification: string;
+
+declare enum NS_OPTIONS {
+    /**
+     *  the application may not present any UI upon a notification being received
+     */
+    JPAuthorizationOptionNone,
+    /**
+     * the application may badge its icon upon a notification being received
+     */
+    JPAuthorizationOptionBadge,
+    /**
+     * the application may play a sound upon a notification being received
+     */
+    JPAuthorizationOptionSound,
+    /**
+     * the application may display an alert upon a notification being received
+     */
+    JPAuthorizationOptionAlert,
+    /**
+     * The ability to display notifications in a CarPlay environment.
+     */
+    JPAuthorizationOptionCarPlay,
+    /**
+     * //The ability to play sounds for critical alerts.
+     */
+    JPAuthorizationOptionCriticalAlert,
+    /**
+     * An option indicating the system should display a button for in-app notification settings.
+     */
+    JPAuthorizationOptionProvidesAppNotificationSettings,
+    /**
+     * The ability to post noninterrupting notifications provisionally to the Notification Center.
+     */
+    JPAuthorizationOptionProvisional
+}
+
 /**
  * 通知注册实体类
  */
@@ -8,7 +77,7 @@ declare class JPUSHRegisterEntity extends NSObject {
      */
     types: number;
     /**
-     *  注入的类别
+     * 注入的类别
      * iOS10 UNNotificationCategory
      * iOS8-iOS9 UIUserNotificationCategory
      */
@@ -22,7 +91,7 @@ declare class JPushNotificationIdentifier extends NSObject implements NSCoding, 
     /**
      * 推送的标识数组
      */
-    identifiers: [];
+    identifiers: string[];
     /**
      * iOS10以下可以传UILocalNotification对象数据，iOS10以上无效
      */
@@ -35,13 +104,42 @@ declare class JPushNotificationIdentifier extends NSObject implements NSCoding, 
     delivered: boolean;
 
     /**
-     * 用于查询回调，调用[findNotification:]方法前必须设置，results为返回相应对象数组，
-     * iOS10以下返回UILocalNotification对象数组；
-     * iOS10以上根据delivered传入值返回UNNotification或UNNotificationRequest对象数组
-     *
-     * （delivered传入YES，则返回UNNotification对象数组，否则返回UNNotificationRequest对象数组）
+     * '@property (nonatomic, copy) void (^findCompletionHandler)(NSArray *results);
+     * // 用于查询回调，调用[findNotification:]方法前必须设置，results为返回相应对象数组，
+     *  iOS10以下返回UILocalNotification对象数组；
+     *  iOS10以上根据delivered传入值返回UNNotification或UNNotificationRequest对象数组
+     *      （delivered传入YES，则返回UNNotification对象数组，否则返回UNNotificationRequest对象数组）
      */
-    findCompletionHandler(): Array<UNNotification | UNNotificationRequest>;
+    // findCompletionHandler(): Array<UNNotification | UNNotificationRequest>;
+    findCompletionHandler(callback: (results: Array<UNNotification | UNNotificationRequest>) => void): void;
+
+    copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+    encodeWithCoder(aCoder: NSCoder): void;
+
+    initWithCoder(aDecoder: NSCoder): NSCoding;
+}
+
+/**
+ * 推送通知声音实体类
+ * iOS10以上有效
+ */
+declare class JPushNotificationSound extends NSObject implements NSCoding, NSCopying {
+    /**
+     * 普通通知铃声
+     */
+    soundName: string;
+    /**
+     * 警告通知铃声 ios12
+     */
+    criticalSoundName: string;
+    /**
+     * 警告通知铃声音量，有效值在0~1之间，默认为1
+     *
+     * float
+     */
+    criticalSoundVolume: number;
+
 
     copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
 
@@ -87,6 +185,12 @@ declare class JPushNotificationContent extends NSObject implements NSCoding, NSC
      */
     sound: string;
     /**
+     * 推送声音实体
+     *
+     * ios 10
+     */
+    soundSetting: JPushNotificationSound;
+    /**
      * 附件，iOS10以上有效，需要传入UNNotificationAttachment对象数组类型
      */
     attachments: UNNotificationAttachment[];
@@ -99,6 +203,17 @@ declare class JPushNotificationContent extends NSObject implements NSCoding, NSC
      * 启动图片名，iOS10以上有效，从推送启动时将会用到
      */
     launchImageName: string;
+    /**
+     * 插入到通知摘要中的部分参数。iOS12以上有效。
+     * @since ios12
+     */
+    summaryArgument: string;
+    /**
+     * 插入到通知摘要中的项目数。iOS12以上有效。
+     *
+     * @since ios12
+     */
+    summaryArgumentCount: number;
 
 
     copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
@@ -121,6 +236,7 @@ declare class JPushNotificationTrigger extends NSObject implements NSCoding, NSC
     repeat: boolean;
     /**
      * 用来设置触发推送的时间，iOS10以上无效
+     * @deprecated
      */
     fireDate?: Date;
 
@@ -134,6 +250,8 @@ declare class JPushNotificationTrigger extends NSObject implements NSCoding, NSC
     dateComponents?: NSDateComponents;
     /**
      * 用来设置触发推送的时间，iOS10以上有效，优先级为III
+     *
+     * double
      */
     timeInterval: number;
 
@@ -167,6 +285,9 @@ declare class JPushNotificationRequest extends NSObject implements NSCoding, NSC
      *
      * iOS10以上成功则result为UNNotificationRequest对象，失败则result为nil;
      * iOS10以下成功则result为UILocalNotification对象，失败则result为nil
+     *
+     * " @property (nonatomic, copy) void (^completionHandler)(id result);  "
+     *
      * @param calllback
      */
     completionHandler(calllback: (result: UNNotificationRequest | UILocalNotification) => void): void;
@@ -178,6 +299,7 @@ declare class JPushNotificationRequest extends NSObject implements NSCoding, NSC
 
     initWithCoder(aDecoder: NSCoder): NSCoding;
 }
+
 
 declare class JPUSHRegisterDelegate extends NSObject {
     /**
@@ -203,6 +325,17 @@ declare class JPUSHRegisterDelegate extends NSObject {
                             response: UNNotificationResponse,
                             completionHandler: () => void): void;
 }
+
+// JPUSHTagsOperationCompletion
+// typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
+
+// JPUSHTagValidOperationCompletion
+// typedef void (^JPUSHTagValidOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq, BOOL isBind);
+
+// JPUSHAliasOperationCompletion
+// typedef void (^JPUSHAliasOperationCompletion)(NSInteger iResCode, NSString *iAlias, NSInteger seq);
+
+export declare function JPUSHTagsOperationCompletion(iResCode: number, iTags: NSSet, seq: number): void;
 
 
 /**
@@ -264,10 +397,137 @@ export declare class JPUSHService extends NSObject {
      */
     public static handleRemoteNotification(remoteInfo: NSDictionary<string, any>): void;
 
-    // TODO 中间一些关于tag/alias就暂时先不处理了
+    /**
+     * 设置手机号码
+     *
+     * 用于短信补充功能。设置手机号码后，可实现“推送不到短信到”的通知方式，提高推送达到率。
+     *
+     * 此接口调用频率有限制，10s 之内最多 3 次。建议在登录成功以后，再调用此接口。
+     * 结果信息通过 completion 异步返回，也可将completion 设置为 nil 不处理结果信息。
+     *
+     * @param mobileNumber 手机号码。只能以 “+” 或者数字开头，后面的内容只能包含 “-” 和数字，并且长度不能超过 20。如果传 nil 或空串则为解除号码绑定操作
+     * @param completion 响应回调。成功则 error 为空，失败则 error 带有错误码及错误信息，具体错误码详见错误码定义
+     */
+    public static setMobileNumber(mobileNumber: string, completion: (error: NSError) => void): void;
+
+    /*
+ * Tags操作接口
+ * 支持增加/覆盖/删除/清空/查询操作
+ * 详情请参考文档：https://docs.jiguang.cn/jpush/client/iOS/ios_api/）
+
+    ///----------------------------------------------------
+    /// @name Tag alias setting 设置别名与标签
+    ///----------------------------------------------------
+*/
+    /**
+     * 增加tags
+     *
+     * typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
+     *
+     * @param tags 需要增加的tags集合
+     * @param completion 响应回调
+     * @param seq 请求序列号
+     */
+    public static addTags(tags: NSSet<string>,
+                          completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                          seq: number): void;
+
+    /**
+     * 覆盖tags
+     调用该接口会覆盖用户所有的tags
+     * typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
+     * @param tags 需要设置的tags集合
+     * @param completion
+     * @param seq
+     */
+    public static setTags(tags: NSSet<string>,
+                          completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                          seq: number): void;
+
+    /**
+     * 删除指定tags
+     * typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
+     * @param tags 需要删除的tags集合
+     * @param completion
+     * @param seq
+     */
+    public static deleteTags(tags: NSSet<string>,
+                             completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                             seq: number): void;
+
+    /**
+     *  清空所有tags
+     * @param completion
+     * @param seq
+     */
+    public static cleanTags(completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                            seq: number): void;
+
+    /**
+     * 查询全部tags
+     * @param completion 响应回调，请在回调中获取查询结果
+     * @param seq
+     */
+    public static getAllTags(completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                             seq: number): void;
+
+    /**
+     *
+     * 验证tag是否绑定
+     //typedef void (^JPUSHTagValidOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq, BOOL isBind);
+
+     * @param tag
+     * @param completion 响应回调，回调中查看是否绑定
+     * @param seq 请求序列号
+     */
+    public static validTag(tag: string,
+                           completion: (iResCode: number, iTags: NSSet<string>, seq: number, isBind: boolean) => void,
+                           seq: number): void;
+
+    /**
+     * 设置Alias
+     *
+     *
+     * // typedef void (^JPUSHAliasOperationCompletion)(NSInteger iResCode, NSString *iAlias, NSInteger seq);
+     *
+     * @param alias 需要设置的alias
+     * @param completion 响应回调
+     * @param seq 请求序列号
+     */
+    public static setAlias(alias: string,
+                           completion: (iResCode: number, iAlias: string, seq: number) => void,
+                           seq: number): void;
+
+    /**
+     *  删除alias
+     *
+     * @param completion 响应回调
+     * @param seq 请求序列号
+     */
+    public static deleteAlias(completion: (iResCode: number, iAlias: string, seq: number) => void,
+                              seq: number): void;
+
+    /**
+     *  查询当前alias
+     * @param completion
+     * @param seq
+     */
+    public static getAlias(completion: (iResCode: number, iAlias: string, seq: number) => void,
+                           seq: number): void;
+
+    /**
+     * 过滤掉无效的 tags
+     *
+     * 如果 tags 数量超过限制数量, 则返回靠前的有效的 tags.
+     * 建议设置 tags 前用此接口校验. SDK 内部也会基于此接口来做过滤.
+     * @param tags
+     */
+    public static filterValidTags(tags: NSSet): NSSet;
+
 
     /**
      *  开启Crash日志收集
+     *
      *  默认是关闭状态.
      */
     public static crashLogON(): void;
@@ -329,11 +589,19 @@ export declare class JPUSHService extends NSObject {
      * @abstract 查找推送 (支持iOS10，并兼容iOS10以下版本)
      *
      * JPush 2.1.9新接口
-     * @param identifier JPushNotificationIdentifier类型，iOS10以上可以通过设置identifier.delivered和identifier.identifiers来查找相应在通知中心显示推送或待推送请求，identifier.identifiers如果设置为nil或空数组则返回相应标志下所有在通知中心显示推送或待推送请求；iOS10以下identifier.delivered属性无效，identifier.identifiers如果设置nil或空数组则返回所有推送。须要设置identifier.findCompletionHandler回调才能得到查找结果，通过(NSArray *results)返回相应对象数组。
+     * @param identifier JPushNotificationIdentifier类型，
+     *      iOS10以上可以通过设置identifier.delivered和identifier.identifiers来查找相应在通知中心显示推送或待推送请求，
+     *      identifier.identifiers如果设置为nil或空数组则返回相应标志下所有在通知中心显示推送或待推送请求；
+     *
+     *      iOS10以下identifier.delivered属性无效，
+     *      identifier.identifiers如果设置nil或空数组则返回所有未触发的推送。
+     *      须要设置identifier.findCompletionHandler回调才能得到查找结果，通过(NSArray *results)返回相应对象数组。
+     *
      * @discussion 旧的查找推送接口被废弃，使用此接口可以替换
      *
      */
     public static findNotification(identifier: JPushNotificationIdentifier): void;
+
 
     /**
      * @abstract 前台展示本地推送
