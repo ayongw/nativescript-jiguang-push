@@ -25,3 +25,8 @@ demo/report/report.html
 demo/report/stats.json
 !demo-vue/app/app.js
 src/package-lock.json
+
+demo-ng/hooks/
+demo-ng/node_modules/
+demo-ng/platforms/
+demo-ng/package-lock.json
