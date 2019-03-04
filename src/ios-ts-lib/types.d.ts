@@ -1,4 +1,4 @@
-declare const JPUSH_VERSION_NUMBER;
+declare const JPUSH_VERSION_NUMBER = "3.1.2";
 /**
  * 正在连接中
  */
