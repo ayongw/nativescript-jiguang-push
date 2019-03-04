@@ -321,9 +321,11 @@ declare class JPushNotificationRequest extends NSObject implements NSCoding, NSC
 declare interface JPUSHRegisterDelegate extends NSObject {
     /**
      *
-     *  - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger options))completionHandler;
-     *
      * @brief handle UserNotifications.framework [willPresentNotification:withCompletionHandler:]
+     *
+     *  - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center
+     *          willPresentNotification:(UNNotification *)notification
+     *            withCompletionHandler:(void (^)(NSInteger options))completionHandler;
      *
      * @param center [UNUserNotificationCenter currentNotificationCenter] 新特性用户通知中心
      * @param notification 前台得到的的通知对象
@@ -400,17 +402,45 @@ export declare class JPUSHService extends NSObject {
      *
      * 此接口必须在 App 启动时调用, 否则 JPush SDK 将无法正常工作.
      *
+     * + (void)setupWithOption:(NSDictionary *)launchingOption
+     *                  appKey:(NSString *)appKey
+     *                 channel:(NSString *)channel
+     *        apsForProduction:(BOOL)isProduction;
+     *
+     * @param launchingOption 启动参数.
+     * @param appKey 一个JPush 应用必须的,唯一的标识. 请参考 JPush 相关说明文档来获取这个标识.
+     * @param channel 发布渠道. 可选.
+     * @param isProduction 是否生产环境. 如果为开发状态,设置为 NO; 如果为生产状态,应改为 YES.
+     */
+    public static setupWithOptionAppKeyChannelApsForProduction(
+        launchingOption: NSDictionary<string, any>,
+        appKey: string,
+        channel: string,
+        isProduction: boolean): void;
+
+    /**
+     * 提供SDK启动必须的参数, 来启动 SDK.
+     *
+     * 此接口必须在 App 启动时调用, 否则 JPush SDK 将无法正常工作.
+     *
+     * + (void)setupWithOption:(NSDictionary *)launchingOption
+     *                  appKey:(NSString *)appKey
+     *                 channel:(NSString *)channel
+     *        apsForProduction:(BOOL)isProduction
+     *   advertisingIdentifier:(NSString *)advertisingId;
+     *
      * @param launchingOption 启动参数.
      * @param appKey 一个JPush 应用必须的,唯一的标识. 请参考 JPush 相关说明文档来获取这个标识.
      * @param channel 发布渠道. 可选.
      * @param isProduction 是否生产环境. 如果为开发状态,设置为 NO; 如果为生产状态,应改为 YES.
      * @param advertisingIdentifier 广告标识符（IDFA） 如果不需要使用IDFA，传nil.
      */
-    public static setupWithOption(launchingOption: NSDictionary<string, any>,
-                                  appKey: string,
-                                  channel: string,
-                                  isProduction: boolean,
-                                  advertisingIdentifier?: string): void;
+    public static setupWithOptionAppKeyChannelApsForProductionAdvertisingIdentifier(
+        launchingOption: NSDictionary<string, any>,
+        appKey: string,
+        channel: string,
+        isProduction: boolean,
+        advertisingIdentifier: string): void;
 
     /*
     ///----------------------------------------------------
@@ -420,19 +450,24 @@ export declare class JPUSHService extends NSObject {
      */
     /**
      * 注册要处理的远程通知类型
+     *
+     * + (void)registerForRemoteNotificationTypes:(NSUInteger)types
+     *                                 categories:(NSSet *)categories;
+     *
      * @param types 通知类型
      * @param categories 类别组
      */
-    public static registerForRemoteNotificationTypes(types: number, categories: NSSet<string>): void;
+    public static registerForRemoteNotificationTypesCategories(types: number, categories: NSSet<string>): void;
 
     /**
      *  新版本的注册方法（兼容iOS10）
      *
+     * + (void)registerForRemoteNotificationConfig:(JPUSHRegisterEntity *)config delegate:(id<JPUSHRegisterDelegate>)delegate;
      * @param config 注册通知配置
      * @param delegate 代理
      *
      */
-    public static registerForRemoteNotificationConfig(config: JPUSHRegisterEntity, delegate: JPUSHRegisterDelegate): void;
+    public static registerForRemoteNotificationConfigDelegate(config: JPUSHRegisterEntity, delegate: JPUSHRegisterDelegate): void;
 
     public static registerDeviceToken(deviceToken: NSData): void;
 
@@ -445,6 +480,9 @@ export declare class JPUSHService extends NSObject {
     /**
      * 设置手机号码
      *
+     * + (void)setMobileNumber:(NSString *)mobileNumber
+     *              completion:(void (^)(NSError *error))completion;
+     *
      * 用于短信补充功能。设置手机号码后，可实现“推送不到短信到”的通知方式，提高推送达到率。
      *
      * 此接口调用频率有限制，10s 之内最多 3 次。建议在登录成功以后，再调用此接口。
@@ -453,7 +491,7 @@ export declare class JPUSHService extends NSObject {
      * @param mobileNumber 手机号码。只能以 “+” 或者数字开头，后面的内容只能包含 “-” 和数字，并且长度不能超过 20。如果传 nil 或空串则为解除号码绑定操作
      * @param completion 响应回调。成功则 error 为空，失败则 error 带有错误码及错误信息，具体错误码详见错误码定义
      */
-    public static setMobileNumber(mobileNumber: string, completion: (error: NSError) => void): void;
+    public static setMobileNumberCompletion(mobileNumber: string, completion: (error: NSError) => void): void;
 
     /*
  * Tags操作接口
@@ -469,99 +507,132 @@ export declare class JPUSHService extends NSObject {
      *
      * typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
      *
+     * + (void)addTags:(NSSet<NSString *> *)tags
+     *      completion:(JPUSHTagsOperationCompletion)completion
+     *             seq:(NSInteger)seq;
+     *
      * @param tags 需要增加的tags集合
      * @param completion 响应回调
      * @param seq 请求序列号
      */
-    public static addTags(tags: NSSet<string>,
-                          completion: (iResCode: number, iTags: NSSet, seq: number) => void,
-                          seq: number): void;
+    public static addTagsCompletionSeq(tags: NSSet<string>,
+                                       completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                                       seq: number): void;
 
     /**
      * 覆盖tags
-     调用该接口会覆盖用户所有的tags
+     * 调用该接口会覆盖用户所有的tags
      * typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
+     * + (void)setTags:(NSSet<NSString *> *)tags
+     *      completion:(JPUSHTagsOperationCompletion)completion
+     *             seq:(NSInteger)seq;
+     *
      * @param tags 需要设置的tags集合
      * @param completion
      * @param seq
      */
-    public static setTags(tags: NSSet<string>,
-                          completion: (iResCode: number, iTags: NSSet, seq: number) => void,
-                          seq: number): void;
+    public static setTagsCompletionSeq(tags: NSSet<string>,
+                                       completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                                       seq: number): void;
 
     /**
      * 删除指定tags
      * typedef void (^JPUSHTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
+     * + (void)deleteTags:(NSSet<NSString *> *)tags
+     *         completion:(JPUSHTagsOperationCompletion)completion
+     *                seq:(NSInteger)seq;
+     *
      * @param tags 需要删除的tags集合
      * @param completion
      * @param seq
      */
-    public static deleteTags(tags: NSSet<string>,
-                             completion: (iResCode: number, iTags: NSSet, seq: number) => void,
-                             seq: number): void;
+    public static deleteTagsCompletionSeq(tags: NSSet<string>,
+                                          completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                                          seq: number): void;
 
     /**
      *  清空所有tags
-     * @param completion
-     * @param seq
+     *
+     * + (void)cleanTags:(JPUSHTagsOperationCompletion)completion
+     *               seq:(NSInteger)seq;
+     *
+     * @param completion 响应回调
+     * @param seq 请求序列号
      */
-    public static cleanTags(completion: (iResCode: number, iTags: NSSet, seq: number) => void,
-                            seq: number): void;
+    public static cleanTagsSeq(completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                               seq: number): void;
 
     /**
      * 查询全部tags
+     * + (void)getAllTags:(JPUSHTagsOperationCompletion)completion
+     *                seq:(NSInteger)seq;
      * @param completion 响应回调，请在回调中获取查询结果
-     * @param seq
+     * @param seq 请求序列号
      */
-    public static getAllTags(completion: (iResCode: number, iTags: NSSet, seq: number) => void,
-                             seq: number): void;
+    public static getAllTagsSeq(completion: (iResCode: number, iTags: NSSet, seq: number) => void,
+                                seq: number): void;
 
     /**
      *
      * 验证tag是否绑定
-     //typedef void (^JPUSHTagValidOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq, BOOL isBind);
-
+     * //typedef void (^JPUSHTagValidOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq, BOOL isBind);
+     *
+     * + (void)validTag:(NSString *)tag
+     *       completion:(JPUSHTagValidOperationCompletion)completion
+     *              seq:(NSInteger)seq;
+     *
      * @param tag
      * @param completion 响应回调，回调中查看是否绑定
      * @param seq 请求序列号
      */
-    public static validTag(tag: string,
-                           completion: (iResCode: number, iTags: NSSet<string>, seq: number, isBind: boolean) => void,
-                           seq: number): void;
+    public static validTagCompletionSeq(tag: string,
+                                        completion: (iResCode: number, iTags: NSSet<string>, seq: number, isBind: boolean) => void,
+                                        seq: number): void;
 
     /**
      * 设置Alias
-     *
-     *
      * // typedef void (^JPUSHAliasOperationCompletion)(NSInteger iResCode, NSString *iAlias, NSInteger seq);
+     *
+     * + (void)setAlias:(NSString *)alias
+     *       completion:(JPUSHAliasOperationCompletion)completion
+     *              seq:(NSInteger)seq;
      *
      * @param alias 需要设置的alias
      * @param completion 响应回调
      * @param seq 请求序列号
      */
-    public static setAlias(alias: string,
-                           completion: (iResCode: number, iAlias: string, seq: number) => void,
-                           seq: number): void;
+    public static setAliasCompletionSeq(alias: string,
+                                        completion: (iResCode: number, iAlias: string, seq: number) => void,
+                                        seq: number): void;
 
     /**
      *  删除alias
      *
+     * + (void)deleteAlias:(JPUSHAliasOperationCompletion)completion
+     *                 seq:(NSInteger)seq;
+     *
      * @param completion 响应回调
      * @param seq 请求序列号
      */
-    public static deleteAlias(completion: (iResCode: number, iAlias: string, seq: number) => void,
-                              seq: number): void;
+    public static deleteAliasSeq(completion: (iResCode: number, iAlias: string, seq: number) => void,
+                                 seq: number): void;
 
     /**
      *  查询当前alias
+     *
+     * + (void)getAlias:(JPUSHAliasOperationCompletion)completion
+     *                 seq:(NSInteger)seq;
+     *
      * @param completion
      * @param seq
      */
-    public static getAlias(completion: (iResCode: number, iAlias: string, seq: number) => void,
-                           seq: number): void;
+    public static getAliasSeq(completion: (iResCode: number, iAlias: string, seq: number) => void,
+                              seq: number): void;
 
     /**
      * 过滤掉无效的 tags
+     *
+     *  + (NSSet *)filterValidTags:(NSSet *)tags;
      *
      * 如果 tags 数量超过限制数量, 则返回靠前的有效的 tags.
      * 建议设置 tags 前用此接口校验. SDK 内部也会基于此接口来做过滤.
@@ -573,6 +644,8 @@ export declare class JPUSHService extends NSObject {
     /**
      *  开启Crash日志收集
      *
+     * + (void)crashLogON;
+     *
      *  默认是关闭状态.
      */
     public static crashLogON(): void;
@@ -580,14 +653,17 @@ export declare class JPUSHService extends NSObject {
     /**
      * 地理位置上报
      *
+     *  + (void)setLatitude:(double)latitude
+     *            longitude:(double)longitude;
+     *
      * @param latitude 纬度.
      * @param longitude 经度.
-     *
      */
-    public static setLatitude(latitude: number, longitude: number): void;
+    public static setLatitudeLongitude(latitude: number, longitude: number): void;
 
     /**
      *  地理位置上报
+     * + (void)setLocation:(CLLocation *)location;
      *
      * @param location 直接传递 CLLocation * 型的地理信息
      *
@@ -603,6 +679,8 @@ export declare class JPUSHService extends NSObject {
     /**
      *  注册或更新推送 (支持iOS10，并兼容iOS10以下版本)
      *
+     * + (void)addNotification:(JPushNotificationRequest *)request;
+     *
      * JPush 2.1.9新接口
      * @param request JPushNotificationRequest类型，设置推送的属性，
      *  设置已有推送的request.requestIdentifier即更新已有的推送，否则为注册新推送，
@@ -615,6 +693,8 @@ export declare class JPUSHService extends NSObject {
 
     /**
      *  移除推送 (支持iOS10，并兼容iOS10以下版本)
+     *
+     *  + (void)removeNotification:(JPushNotificationIdentifier *)identifier;
      *
      * JPush 2.1.9新接口
      * @param identifier JPushNotificationIdentifier类型，
@@ -632,6 +712,8 @@ export declare class JPUSHService extends NSObject {
 
     /**
      * @abstract 查找推送 (支持iOS10，并兼容iOS10以下版本)
+     *
+     * + (void)findNotification:(JPushNotificationIdentifier *)identifier;
      *
      * JPush 2.1.9新接口
      * @param identifier JPushNotificationIdentifier类型，
@@ -651,6 +733,10 @@ export declare class JPUSHService extends NSObject {
     /**
      * @abstract 前台展示本地推送
      *
+     *
+     + (void)showLocalNotificationAtFront:(UILocalNotification *)notification
+     identifierKey:(NSString *)notificationKey __attribute__((deprecated("JPush 2.1.9 版本已过期")));
+     *
      * @param notification 本地推送对象
      * @param notificationKey 需要前台显示的本地推送通知的标示符
      *
@@ -661,7 +747,7 @@ export declare class JPUSHService extends NSObject {
      *
      * @deprecated JPush 2.1.9 版本已过期
      */
-    public static showLocalNotificationAtFront(notification: UILocalNotification, notificationKey: string): void;
+    public static showLocalNotificationAtFrontIdentifierKey(notification: UILocalNotification, notificationKey: string): void;
 
     /*
     ///----------------------------------------------------
@@ -670,6 +756,8 @@ export declare class JPUSHService extends NSObject {
     */
     /**
      *  设置角标(到服务器)
+     *
+     *  + (BOOL)setBadge:(NSInteger)value;
      *
      * @param value 新的值. 会覆盖服务器上保存的值(这个用户)
      *
@@ -690,6 +778,8 @@ export declare class JPUSHService extends NSObject {
     /**
      * @abstract 重置脚标(为0)
      *
+     * + (void)resetBadge;
+     *
      * @discussion 相当于 [setBadge:0] 的效果.
      * 参考 [JPUSHService setBadge:] 说明来理解其作用.
      */
@@ -703,6 +793,8 @@ export declare class JPUSHService extends NSObject {
     /**
      * @abstract JPush标识此设备的 registrationID
      *
+     *  + (NSString *)registrationID;
+     *
      * @discussion SDK注册成功后, 调用此接口获取到 registrationID 才能够获取到.
      *
      * JPush 支持根据 registrationID 来进行推送.
@@ -714,10 +806,17 @@ export declare class JPUSHService extends NSObject {
      */
     public static registrationID(): string;
 
+    /**
+     * + (void)registrationIDCompletionHandler:(void(^)(int resCode,NSString *registrationID))completionHandler;
+     *
+     * @param completionHandler
+     */
     public static registrationIDCompletionHandler(completionHandler: (resCode: number, registrationID: string) => void): void;
 
     /**
      * @abstract 打开日志级别到 Debug
+     *
+     * + (void)setDebugMode;
      *
      * @discussion JMessage iOS 的日志系统参考 Android 设计了级别.
      * 从低到高是: Verbose, Debug, Info, Warning, Error.
@@ -731,6 +830,8 @@ export declare class JPUSHService extends NSObject {
 
     /**
      * @abstract 关闭日志
+     *
+     * + (void)setLogOFF;
      *
      * @discussion 关于日志级别的说明, 参考 [JPUSHService setDebugMode]
      *
