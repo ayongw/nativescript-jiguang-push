@@ -32,39 +32,52 @@ declare const kJPFNetworkDidReceiveMessageNotification: string;
  */
 declare const kJPFServiceErrorNotification: string;
 
-declare enum NS_OPTIONS {
+/*
+typedef NS_OPTIONS(NSUInteger, JPAuthorizationOptions) {
+    JPAuthorizationOptionNone    = 0,   // the application may not present any UI upon a notification being received
+    JPAuthorizationOptionBadge   = (1 << 0),    // the application may badge its icon upon a notification being received
+    JPAuthorizationOptionSound   = (1 << 1),    // the application may play a sound upon a notification being received
+    JPAuthorizationOptionAlert   = (1 << 2),    // the application may display an alert upon a notification being received
+    JPAuthorizationOptionCarPlay = (1 << 3),    // The ability to display notifications in a CarPlay environment.
+    JPAuthorizationOptionCriticalAlert NS_AVAILABLE_IOS(12.0) = (1 << 4) ,   //The ability to play sounds for critical alerts.
+    JPAuthorizationOptionProvidesAppNotificationSettings NS_AVAILABLE_IOS(12.0) = (1 << 5) ,      //An option indicating the system should display a button for in-app notification settings.
+    JPAuthorizationOptionProvisional NS_AVAILABLE_IOS(12.0) = (1 << 6) ,     //The ability to post noninterrupting notifications provisionally to the Notification Center.
+
+};
+ */
+declare enum JPAuthorizationOptions {
     /**
      *  the application may not present any UI upon a notification being received
      */
-    JPAuthorizationOptionNone,
+    None,
     /**
      * the application may badge its icon upon a notification being received
      */
-    JPAuthorizationOptionBadge,
+    Badge,
     /**
      * the application may play a sound upon a notification being received
      */
-    JPAuthorizationOptionSound,
+    Sound,
     /**
      * the application may display an alert upon a notification being received
      */
-    JPAuthorizationOptionAlert,
+    Alert,
     /**
      * The ability to display notifications in a CarPlay environment.
      */
-    JPAuthorizationOptionCarPlay,
+    CarPlay,
     /**
      * //The ability to play sounds for critical alerts.
      */
-    JPAuthorizationOptionCriticalAlert,
+    CriticalAlert,
     /**
      * An option indicating the system should display a button for in-app notification settings.
      */
-    JPAuthorizationOptionProvidesAppNotificationSettings,
+    ProvidesAppNotificationSettings,
     /**
      * The ability to post noninterrupting notifications provisionally to the Notification Center.
      */
-    JPAuthorizationOptionProvisional
+    Provisional
 }
 
 /**
@@ -166,6 +179,7 @@ declare class JPushNotificationContent extends NSObject implements NSCoding, NSC
     body: string;
     /**
      * 角标的数字。如果不需要改变角标传@(-1)
+     * NSNumber
      */
     badge: number;
     /**
@@ -211,6 +225,7 @@ declare class JPushNotificationContent extends NSObject implements NSCoding, NSC
     /**
      * 插入到通知摘要中的项目数。iOS12以上有效。
      *
+     * NSUInteger
      * @since ios12
      */
     summaryArgumentCount: number;
@@ -252,6 +267,8 @@ declare class JPushNotificationTrigger extends NSObject implements NSCoding, NSC
      * 用来设置触发推送的时间，iOS10以上有效，优先级为III
      *
      * double
+     * NSTimeInterval
+     * typedef double NSTimeInterval;
      */
     timeInterval: number;
 
@@ -312,9 +329,13 @@ declare interface JPUSHRegisterDelegate extends NSObject {
      * @param notification 前台得到的的通知对象
      * @param completionHandler 该callback中的options 请使用UNNotificationPresentationOptions
      */
-    jpushNotificationCenter(center: UNUserNotificationCenter,
-                            notification: UNNotification,
-                            completionHandler: (options: number) => void): void;
+    // jpushNotificationCenter(center: UNUserNotificationCenter,
+    //                         notification: UNNotification,
+    //                         completionHandler: (options: number) => void): void;
+
+    jpushNotificationCenterWillPresentNotificationWithCompletionHandler(center: UNUserNotificationCenter,
+                                                                        notification: UNNotification,
+                                                                        completionHandler: (options: number) => void): void;
 
 
     /**
@@ -328,16 +349,25 @@ declare interface JPUSHRegisterDelegate extends NSObject {
      * @param response 通知响应对象
      * @param completionHandler
      */
-    jpushNotificationCenter(center: UNUserNotificationCenter,
-                            response: UNNotificationResponse,
-                            completionHandler: () => void): void;
+    // jpushNotificationCenter(center: UNUserNotificationCenter,
+    //                         response: UNNotificationResponse,
+    //                         completionHandler: () => void): void;
+    jpushNotificationCenterDidReceiveNotificationResponseWithCompletionHandler(center: UNUserNotificationCenter,
+                                                                               response: UNNotificationResponse,
+                                                                               completionHandler: () => void): void;
+
     /**
      * handle UserNotifications.framework [openSettingsForNotification:]
+     *
+     * - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center openSettingsForNotification:(nullable UNNotification *)notification NS_AVAILABLE_IOS(12.0);
      *
      * @param center [UNUserNotificationCenter currentNotificationCenter] 新特性用户通知中心
      * @param notification 当前管理的通知对象
      */
-    jpushNotificationCenter(center: UNUserNotificationCenter, notification: UNNotification): void;
+    // jpushNotificationCenter(center: UNUserNotificationCenter, notification: UNNotification): void;
+    jpushNotificationCenterOpenSettingsForNotification(center: UNUserNotificationCenter,
+                                                       notification: UNNotification): void;
+
 }
 
 

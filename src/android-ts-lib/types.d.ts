@@ -13,9 +13,8 @@ declare namespace cn {
     export namespace jpush {
         export namespace android {
             export namespace api {
-                import JPushLocalNotification = cn.jpush.android.data.JPushLocalNotification;
-
                 export class JPushInterface {
+                    public static class: java.lang.Class<cn.jpush.android.api.JPushInterface>;
                     /**
                      * JPush 服务的连接状态发生变化。（注：不是指 Android 系统的网络连接状态。）
                      * Intent 参数
@@ -208,6 +207,8 @@ declare namespace cn {
                     public static EXTRA_RICHPUSH_HTML_RES: string;
                     public static EXTRA_STATUS: string;
                     public static ACTION_RICHPUSH_CALLBACK: string;
+
+                    public constructor();
 
                     /**
                      * 初始化推送服务。
@@ -509,7 +510,7 @@ declare namespace cn {
                      * @param context
                      * @param notification 是本地通知对象
                      */
-                    public static addLocalNotification(context: android.content.Context, notification: JPushLocalNotification): void;
+                    public static addLocalNotification(context: android.content.Context, notification: cn.jpush.android.data.JPushLocalNotification): void;
 
                     /**
                      *移除指定的本地通知
