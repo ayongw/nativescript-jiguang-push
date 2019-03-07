@@ -9,6 +9,152 @@
  接收到推送的自定义消息，则没有被处理
  可以正常收到通知，用户点击打开应用主界面
  */
+
+declare namespace com {
+    export namespace ayongw {
+        export namespace nativescript {
+            export namespace jiguangpush {
+                export class SequenceMessageReceiver {
+                    static aliaTagsCallBacks: { [key: number]: any } = {};
+
+                    /**
+                     * 添加指定序列的回调函数
+                     * @param seq
+                     * @param callback
+                     */
+                    public static addSeqCallback(seq: number, callback: any): void;
+
+                    /**
+                     * 回调完成后用于删除回调函数
+                     * @param seq
+                     */
+                    public static removeSeqCallback(seq: number): void;
+                }
+            }
+        }
+    }
+}
+
+declare namespace cn {
+    export namespace jpush {
+        export namespace android {
+            export namespace api {
+                export class JPushMessage {
+                    public static class: java.lang.Class<cn.jpush.android.api.JPushMessage>;
+
+                    /**
+                     * 对应操作的返回码，0 为成功，其他返回码请参考错误码定义。
+                     */
+                    getErrorCode(): number;
+
+                    /**
+                     * 开发者调用接口时传入的 sequence，通过该 sequence 开发者可以从开发者自己缓存中获取到对应的操作。
+                     */
+                    getSequence(): number;
+
+                    /**
+                     * 开发者传或查询得到的 alias。
+                     */
+                    getAlias(): string;
+
+                    /**
+                     * 开发者传或查询得到的 tags。
+                     */
+                    getTags(): Set<string>;
+
+                    /**
+                     * 开发者想要查询的 tag 与当前用户绑定的状态。
+                     */
+                    getTagCheckStateResult(): boolean;
+
+                    /**
+                     * 开发者想要查询绑定状态的 tag。
+                     */
+                    getCheckTag(): string;
+
+                    /**
+                     * 开发者调用设置接口时传入的手机号码。
+                     */
+                    getMobileNumber(): string;
+                }
+            }
+        }
+    }
+}
+
+declare namespace cn {
+    export namespace jpush {
+        export namespace android {
+            export namespace data {
+                /**
+                 * 本地通知消息
+                 */
+                export class JPushLocalNotification {
+                    public static class: java.lang.Class<cn.jpush.android.data.JPushLocalNotification>;
+
+                    /**
+                     * 设置本地通知的 ID
+                     * @param id
+                     */
+                    setNotificationId(id: number): void;
+
+                    /**
+                     * 设置本地通知样式
+                     * @param id
+                     */
+                    setBuilderId(id: number): void;
+
+                    /**
+                     * 设置本地通知的 title
+                     * @param title
+                     */
+                    setTitle(title: string): void;
+
+                    /**
+                     * 设置本地通知的 content
+                     * @param title
+                     */
+                    setContent(title: string): void;
+
+                    /**
+                     * 设置本地通知的 ID
+                     */
+                    getNotificationId(): number;
+
+                    /**
+                     * 设置本地通知触发时间
+                     * @param broadcastTime
+                     */
+                    setBroadcastTime(broadcastTime: number): void;
+
+                    /**
+                     * 设置本地通知触发时间
+                     * @param broadcastTime
+                     */
+                    setBroadcastTime(broadcastTime: Date);
+
+                    /**
+                     * 设置本地通知触发时间
+                     * @param year
+                     * @param month
+                     * @param day
+                     * @param hour
+                     * @param minute
+                     * @param second
+                     */
+                    setBroadcastTime(year: number, month: number, day: number, hour: number, minute: number, second: number): void;
+
+                    /**
+                     * 设置额外的数据信息 extras 为 json 字符串
+                     * @param extras
+                     */
+                    setExtras(extras: string): void;
+                }
+            }
+        }
+    }
+}
+
 declare namespace cn {
     export namespace jpush {
         export namespace android {
@@ -532,113 +678,63 @@ declare namespace cn {
 
 
                 }
-
-                export class JPushMessage {
-                    /**
-                     * 对应操作的返回码，0 为成功，其他返回码请参考错误码定义。
-                     */
-                    getErrorCode(): number;
-
-                    /**
-                     * 开发者调用接口时传入的 sequence，通过该 sequence 开发者可以从开发者自己缓存中获取到对应的操作。
-                     */
-                    getSequence(): number;
-
-                    /**
-                     * 开发者传或查询得到的 alias。
-                     */
-                    getAlias(): string;
-
-                    /**
-                     * 开发者传或查询得到的 tags。
-                     */
-                    getTags(): Set<string>;
-
-                    /**
-                     * 开发者想要查询的 tag 与当前用户绑定的状态。
-                     */
-                    getTagCheckStateResult(): boolean;
-
-                    /**
-                     * 开发者想要查询绑定状态的 tag。
-                     */
-                    getCheckTag(): string;
-
-                    /**
-                     * 开发者调用设置接口时传入的手机号码。
-                     */
-                    getMobileNumber(): string;
-
-
-                }
             }
+        }
+    }
+}
 
-            export namespace data {
-
+declare namespace cn {
+    export namespace jpush {
+        export namespace android {
+            export namespace service {
                 /**
-                 * 本地通知消息
+                 * 3.0.7 版本之后新增的回调方式。
+                 * 新的消息回调方式中相关回调类。
+                 * 新的 tag 与 alias 操作回调会在开发者定义的该类的子类中触发。
+                 * 手机号码设置的回调会在开发者定义的该类的子类中触发。
+                 *
+                 * 该类为回调父类，开发者需要继承该类并在 Manifest 中配置您对应实现的类，接口操作的结果会在您配置的类中的如下方法中回调。
+                 * @since 3.0.7
                  */
-                export class JPushLocalNotification {
-                    /**
-                     * 设置本地通知的 ID
-                     * @param id
-                     */
-                    setNotificationId(id: number): void;
+                export class JPushMessageReceiver extends android.content.BroadcastReceiver {
+                    public static class: java.lang.Class<cn.jpush.android.service.JPushMessageReceiver>;
+
+                    public onReceive(context: android.content.Context, intent: android.content.Intent): void;
 
                     /**
-                     * 设置本地通知样式
-                     * @param id
+                     * tag 增删查改的操作会在此方法中回调结果。
+                     *
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage tag 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
+                     * @since 3.0.7
                      */
-                    setBuilderId(id: number): void;
+                    public onTagOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
                     /**
-                     * 设置本地通知的 title
-                     * @param title
+                     *  查询某个 tag 与当前用户的绑定状态的操作会在此方法中回调结果。
+                     *
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage check tag 与当前用户绑定状态的操作返回的消息结果体，具体参考 JPushMessage 类的说明。
                      */
-                    setTitle(title: string): void;
+                    public onCheckTagOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
                     /**
-                     * 设置本地通知的 content
-                     * @param title
+                     * alias 相关的操作会在此方法中回调结果。
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage alias 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
                      */
-                    setContent(title: string): void;
+                    public onAliasOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
                     /**
-                     * 设置本地通知的 ID
+                     * 设置手机号码会在此方法中回调结果。
+                     *
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage 设置手机号码返回的消息结果体，具体参考 JPushMessage 类的说明。
+                     * @since 3.1.1
                      */
-                    getNotificationId(): number;
-
-                    /**
-                     * 设置本地通知触发时间
-                     * @param broadcastTime
-                     */
-                    setBroadcastTime(broadcastTime: number): void;
-
-                    /**
-                     * 设置本地通知触发时间
-                     * @param broadcastTime
-                     */
-                    setBroadcastTime(broadcastTime: Date);
-
-                    /**
-                     * 设置本地通知触发时间
-                     * @param year
-                     * @param month
-                     * @param day
-                     * @param hour
-                     * @param minute
-                     * @param second
-                     */
-                    setBroadcastTime(year: number, month: number, day: number, hour: number, minute: number, second: number): void;
-
-                    /**
-                     * 设置额外的数据信息 extras 为 json 字符串
-                     * @param extras
-                     */
-                    setExtras(extras: string): void;
+                    public onMobileNumberOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
                 }
             }
-
         }
     }
 }

@@ -30,3 +30,4 @@ demo-ng/hooks/
 demo-ng/node_modules/
 demo-ng/platforms/
 demo-ng/package-lock.json
+demo/package-lock.json

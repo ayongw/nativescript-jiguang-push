@@ -12,6 +12,16 @@
 android {  
   defaultConfig {  
     generatedDensities = []
+    ndk {
+      //选择要添加的对应cpu类型的.so库。
+      abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a','x86','x86_64'
+      // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+    }
+    manifestPlaceholders = [
+            JPUSH_PKGNAME : "com.ayongw.mobile.demojiguangpush",
+            JPUSH_APPKEY : "a169a2d7812efa9d917a204d", //JPush上注册的包名对应的appkey.
+            JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+    ]
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
