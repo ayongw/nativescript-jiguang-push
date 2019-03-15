@@ -358,9 +358,9 @@ declare namespace cn {
 
                     /**
                      * 初始化推送服务。
-                     * @param context
+                     * @param context android.content.Context
                      */
-                    public static init(context: android.content.Context): void;
+                    public static init(context: globalAndroid.content.Context): void;
 
                     /**
                      * 停止推送服务。
@@ -369,25 +369,25 @@ declare namespace cn {
 
                      收不到推送消息
                      极光推送所有的其他 API 调用都无效，不能通过 JPushInterface.init 恢复，需要调用 resumePush 恢复。
-                     * @param context
+                     * @param context android.content.Context
                      */
-                    public static stopPush(context: android.content.Context): void;
+                    public static stopPush(context: globalAndroid.content.Context): void;
 
                     /**
                      * 恢复推送服务。
 
                      调用了此 API 后，极光推送完全恢复正常工作。
-                     * @param context
+                     * @param context android.content.Context
                      */
-                    public static resumePush(context: android.content.Context): void;
+                    public static resumePush(context: globalAndroid.content.Context): void;
 
                     /**
                      * 用来检查 Push Service 是否已经被停止
 
                      SDK 1.5.2 以上版本支持。
-                     * @param context
+                     * @param context android.content.Context
                      */
-                    public static isPushStopped(context: android.content.Context): boolean;
+                    public static isPushStopped(context: globalAndroid.content.Context): boolean;
 
                     /**
                      * 动态配置 channel，优先级比 AndroidManifest 里配置的高
@@ -395,10 +395,10 @@ declare namespace cn {
                      SDK 3.1.5 以上版本支持。
 
                      JPushInterface.setChannel(this, "channel_1");
-                     * @param context
+                     * @param context android.content.Context
                      * @param channel
                      */
-                    public static setChannel(context: android.content.Context, channel: string): void;
+                    public static setChannel(context: globalAndroid.content.Context, channel: string): void;
 
                     /**
                      * 过滤出有效的标签列表
@@ -421,25 +421,25 @@ declare namespace cn {
                      * 这个接口是覆盖逻辑，而不是增量逻辑。即新的调用会覆盖之前的设置。
                      * 开始支持的版本：3.0.7
                      * 限制：alias 命名长度限制为 40 字节。（判断长度需采用 UTF-8 编码）
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence 用户自定义的操作序列号，同操作结果一起返回，用来标识一次操作的唯一性。
                      * @param alias 字母（区分大小写）、数字、下划线、汉字、特殊字符@!#$&*+=.|。
                      */
-                    public static setAlias(context: android.content.Context, sequence: number, alias: string): void;
+                    public static setAlias(context: globalAndroid.content.Context, sequence: number, alias: string): void;
 
                     /**
                      * 删除别名。
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence 用户自定义的操作序列号，同操作结果一起返回，用来标识一次操作的唯一性。
                      */
-                    public static deleteAlias(context: android.content.Context, sequence: number): void;
+                    public static deleteAlias(context: globalAndroid.content.Context, sequence: number): void;
 
                     /**
                      * 查询别名。
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence 用户自定义的操作序列号，同操作结果一起返回，用来标识一次操作的唯一性。
                      */
-                    public static getAlias(context: android.content.Context, sequence: number): void;
+                    public static getAlias(context: globalAndroid.content.Context, sequence: number): void;
 
                     /**
                      * 设置标签。
@@ -452,11 +452,11 @@ declare namespace cn {
                      限制：每个 tag 命名长度限制为 40 字节，最多支持设置 1000 个 tag，且单次操作总长度不得超过 5000 字节。（判断长度需采用 UTF-8 编码）
                      单个设备最多支持设置 1000 个 tag。App 全局 tag 数量无限制。
 
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence 用户自定义的操作序列号，同操作结果一起返回，用来标识一次操作的唯一性。
                      * @param tags
                      */
-                    public static setTags(context: android.content.Context, sequence: number, tags: Set<string>): void;
+                    public static setTags(context: globalAndroid.content.Context, sequence: number, tags: Set<string>): void;
 
                     /**
                      * 新增标签。
@@ -465,47 +465,47 @@ declare namespace cn {
                      有效的标签组成：字母（区分大小写）、数字、下划线、汉字、特殊字符@!#$&*+=.|。
                      限制：每个 tag 命名长度限制为 40 字节，最多支持设置 1000 个 tag，且单次操作总长度不得超过 5000 字节。（判断长度需采用 UTF-8 编码）
                      单个设备最多支持设置 1000 个 tag。App 全局 tag 数量无限制。
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence 用户自定义的操作序列号，同操作结果一起返回，用来标识一次操作的唯一性。
                      * @param tags
                      */
-                    public static addTags(context: android.content.Context, sequence: number, tags: Set<string>): void;
+                    public static addTags(context: globalAndroid.content.Context, sequence: number, tags: Set<string>): void;
 
                     /**
                      * 删除指定标签。
                      * 开始支持的版本：3.0.7
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence
                      * @param tags
                      */
-                    public static deleteTags(context: android.content.Context, sequence: number, tags: Set<string>): void;
+                    public static deleteTags(context: globalAndroid.content.Context, sequence: number, tags: Set<string>): void;
 
                     /**
                      * 除所有标签。
                      * 开始支持的版本：3.0.7
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence
                      */
-                    public static cleanTags(context: android.content.Context, sequence: number): void;
+                    public static cleanTags(context: globalAndroid.content.Context, sequence: number): void;
 
                     /**
                      * 查询所有标签。
                      * 开始支持的版本：3.0.7
                      *
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence
                      */
-                    public static getAllTags(context: android.content.Context, sequence: number): void;
+                    public static getAllTags(context: globalAndroid.content.Context, sequence: number): void;
 
                     /**
                      * 查询指定 tag 与当前用户绑定的状态。
                      * 开始支持的版本：3.0.7
                      *
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence
                      * @param tag
                      */
-                    public static checkTagBindState(context: android.content.Context, sequence: number, tag: string): void;
+                    public static checkTagBindState(context: globalAndroid.content.Context, sequence: number, tag: string): void;
 
                     /**
                      *  设置手机号码。该接口会控制调用频率，频率为 10s 之内最多 3 次。
@@ -516,34 +516,34 @@ declare namespace cn {
                      * 回调说明
                      接口回调触发 cn.jpush.android.service.JPushMessageReceiver，详细的回调方法请参考新的消息回调方式说明。
                      *
-                     * @param context
+                     * @param context android.content.Context
                      * @param sequence
                      * @param mobileNumber 手机号码。如果传 null 或空串则为解除号码绑定操作。 限制：只能以 “+” 或者 数字开头；后面的内容只能包含 “-” 和数字。
                      */
-                    public static setMobileNumber(context: android.content.Context, sequence: number, mobileNumber: string): void;
+                    public static setMobileNumber(context: globalAndroid.content.Context, sequence: number, mobileNumber: string): void;
 
                     /**
                      * 调用此 API 来取得应用程序对应的 RegistrationID。 只有当应用程序成功注册到 JPush 的服务器时才返回对应的值，否则返回空字符串。
                      *
                      * JPush SDK 会以广播的形式发送 RegistrationID 到应用程序。
                      应用程序可以把此 RegistrationID 保存以自己的应用服务器上，然后就可以根据 RegistrationID 来向设备推送消息或者通知。
-                     * @param context
+                     * @param context android.content.Context
                      */
-                    public static getRegistrationID(context: android.content.Context): string;
+                    public static getRegistrationID(context: globalAndroid.content.Context): string;
 
                     /**
                      *
                      此 API 提供清除通知的功能，包括：清除所有 JPush 展现的通知（不包括非 JPush SDK 展现的）；清除指定某个通知。
-                     * @param context
+                     * @param context android.content.Context
                      */
-                    public static clearAllNotifications(context: android.content.Context): string;
+                    public static clearAllNotifications(context: globalAndroid.content.Context): string;
 
                     /**
                      *此 notificationId 来源于 intent 参数 JPushInterface.EXTRA_NOTIFICATION_ID，可参考文档：接收推送消息 Receiver
-                     * @param context
+                     * @param context android.content.Context
                      * @param notificationId 通知 ID
                      */
-                    public static clearNotificationById(context: android.content.Context, notificationId: number): string;
+                    public static clearNotificationById(context: globalAndroid.content.Context, notificationId: number): string;
 
                     public static setDebugMode(debugMod: boolean): void;
 
@@ -565,11 +565,11 @@ declare namespace cn {
                         }
 
 
-                     * @param activity Activity activity 当前所在的 Activity。
+                     * @param activity Activity activity 当前所在的 Activity。 android.app.Activity
                      */
-                    public static onResume(activity: android.app.Activity): void;
+                    public static onResume(activity: globalAndroid.app.Activity): void;
 
-                    public static onPause(activity: android.app.Activity): void;
+                    public static onPause(activity: globalAndroid.app.Activity): void;
 
 
                     /**
@@ -594,7 +594,7 @@ declare namespace cn {
                      * @param startHour 许推送的开始时间 （ 24 小时制：startHour 的范围为 0 到 23 ）
                      * @param endHour 允许推送的结束时间 （ 24 小时制：endHour 的范围为 0 到 23 ）
                      */
-                    public static setPushTime(context: android.content.Context, weekDays: Set<number>, startHour: number, endHour: number): void;
+                    public static setPushTime(context: globalAndroid.content.Context, weekDays: Set<number>, startHour: number, endHour: number): void;
 
                     /**
                      * 设置通知静默时间 API
@@ -607,7 +607,7 @@ declare namespace cn {
                      * @param endHour 静音时段的结束时间 - 小时 （ 24 小时制，范围：0~23 ）
                      * @param endMinute  静音时段的结束时间 - 分钟（范围：0~59 ）
                      */
-                    public static setSilenceTime(context: android.content.Context, startHour: number, startMinute: number, endHour: number, endMinute: number): void;
+                    public static setSilenceTime(context: globalAndroid.content.Context, startHour: number, startMinute: number, endHour: number, endMinute: number): void;
 
                     /**
                      *设置是否开启省电模式
@@ -616,7 +616,7 @@ declare namespace cn {
                      * @param context 当前应用的 Activity 的上下文
                      * @param enable 是否需要开启或关闭，true 为开启，false 为关闭
                      */
-                    public static setPowerSaveMode(context: android.content.Context, enable: boolean): void;
+                    public static setPowerSaveMode(context: globalAndroid.content.Context, enable: boolean): void;
 
                     /**
                      * （关闭 CrashLog 上报）
@@ -625,15 +625,15 @@ declare namespace cn {
                      * SDK 通过 Thread.UncaughtExceptionHandler 捕获程序崩溃日志，
                      * 并在程序奔溃时实时上报如果实时上报失败则会在程序下次启动时发送到服务器。如需要程序崩溃日志功能可调用此方法。
                      *
-                     * @param context
+                     * @param context 应用的 ApplicationContext
                      */
-                    public static stopCrashHandler(context: android.content.Context): void;
+                    public static stopCrashHandler(context: globalAndroid.content.Context): void;
 
                     /**
                      * （开启 CrashLog 上报）
-                     * @param context
+                     * @param context 应用的 ApplicationContext
                      */
-                    public static initCrashHandler(context: android.content.Context): void;
+                    public static initCrashHandler(context: globalAndroid.content.Context): void;
 
                     /**
                      * 获取当前连接状态
@@ -641,9 +641,9 @@ declare namespace cn {
                      * JPushInterface.EXTRA_CONNECTION_CHANGE Push 连接状态变化广播传过来的值
                      *
                      * boolean connected = bundle.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
-                     * @param context
+                     * @param context 应用的 ApplicationContext
                      */
-                    public static getConnectionState(context: android.content.Context): boolean;
+                    public static getConnectionState(context: globalAndroid.content.Context): boolean;
 
 
                     /*
@@ -653,28 +653,28 @@ declare namespace cn {
                      * 添加一个本地通知
                      *
                      * 本接口可以在 JPushInterface.init 之后任何地方调用
-                     * @param context
+                     * @param context 应用的 ApplicationContext
                      * @param notification 是本地通知对象
                      */
-                    public static addLocalNotification(context: android.content.Context, notification: cn.jpush.android.data.JPushLocalNotification): void;
+                    public static addLocalNotification(context: globalAndroid.content.Context, notification: cn.jpush.android.data.JPushLocalNotification): void;
 
                     /**
                      *移除指定的本地通知
                      *
                      * 本接口可以在 JPushInterface.init 之后任何地方调用
                      *
-                     * @param context
+                     * @param context 应用的 ApplicationContext
                      * @param notificationId 是要移除的本地通知的 ID
                      */
-                    public static removeLocalNotification(context: android.content.Context, notificationId: number): void;
+                    public static removeLocalNotification(context: globalAndroid.content.Context, notificationId: number): void;
 
                     /**
                      *  移除所有的本地通知
                      *
                      *  本接口可以在 JPushInterface.init 之后任何地方调用
-                     * @param context
+                     * @param context 应用的 ApplicationContext
                      */
-                    public static clearLocalNotifications(context: android.content.Context): void;
+                    public static clearLocalNotifications(context: globalAndroid.content.Context): void;
 
 
                 }
@@ -683,58 +683,53 @@ declare namespace cn {
     }
 }
 
-declare namespace cn {
-    export namespace jpush {
-        export namespace android {
-            export namespace service {
-                /**
-                 * 3.0.7 版本之后新增的回调方式。
-                 * 新的消息回调方式中相关回调类。
-                 * 新的 tag 与 alias 操作回调会在开发者定义的该类的子类中触发。
-                 * 手机号码设置的回调会在开发者定义的该类的子类中触发。
-                 *
-                 * 该类为回调父类，开发者需要继承该类并在 Manifest 中配置您对应实现的类，接口操作的结果会在您配置的类中的如下方法中回调。
-                 * @since 3.0.7
-                 */
-                export class JPushMessageReceiver extends android.content.BroadcastReceiver {
-                    public static class: java.lang.Class<cn.jpush.android.service.JPushMessageReceiver>;
 
-                    public onReceive(context: android.content.Context, intent: android.content.Intent): void;
+declare namespace cn.jpush.android.service {
+    /**
+     * 3.0.7 版本之后新增的回调方式。
+     * 新的消息回调方式中相关回调类。
+     * 新的 tag 与 alias 操作回调会在开发者定义的该类的子类中触发。
+     * 手机号码设置的回调会在开发者定义的该类的子类中触发。
+     *
+     * 该类为回调父类，开发者需要继承该类并在 Manifest 中配置您对应实现的类，接口操作的结果会在您配置的类中的如下方法中回调。
+     * @since 3.0.7
+     */
+    export class JPushMessageReceiver extends android.content.BroadcastReceiver {
+        public static class: java.lang.Class<cn.jpush.android.service.JPushMessageReceiver>;
 
-                    /**
-                     * tag 增删查改的操作会在此方法中回调结果。
-                     *
-                     * @param context 应用的 Application Context。
-                     * @param jpushMessage tag 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
-                     * @since 3.0.7
-                     */
-                    public onTagOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
+        public onReceive(context: globalAndroid.content.Context, intent: android.content.Intent): void;
 
-                    /**
-                     *  查询某个 tag 与当前用户的绑定状态的操作会在此方法中回调结果。
-                     *
-                     * @param context 应用的 Application Context。
-                     * @param jpushMessage check tag 与当前用户绑定状态的操作返回的消息结果体，具体参考 JPushMessage 类的说明。
-                     */
-                    public onCheckTagOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
+        /**
+         * tag 增删查改的操作会在此方法中回调结果。
+         *
+         * @param context 应用的 Application Context。
+         * @param jpushMessage tag 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
+         * @since 3.0.7
+         */
+        public onTagOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
-                    /**
-                     * alias 相关的操作会在此方法中回调结果。
-                     * @param context 应用的 Application Context。
-                     * @param jpushMessage alias 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
-                     */
-                    public onAliasOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
+        /**
+         *  查询某个 tag 与当前用户的绑定状态的操作会在此方法中回调结果。
+         *
+         * @param context 应用的 Application Context。
+         * @param jpushMessage check tag 与当前用户绑定状态的操作返回的消息结果体，具体参考 JPushMessage 类的说明。
+         */
+        public onCheckTagOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
-                    /**
-                     * 设置手机号码会在此方法中回调结果。
-                     *
-                     * @param context 应用的 Application Context。
-                     * @param jpushMessage 设置手机号码返回的消息结果体，具体参考 JPushMessage 类的说明。
-                     * @since 3.1.1
-                     */
-                    public onMobileNumberOperatorResult(context: android.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
-                }
-            }
-        }
+        /**
+         * alias 相关的操作会在此方法中回调结果。
+         * @param context 应用的 Application Context。
+         * @param jpushMessage alias 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
+         */
+        public onAliasOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
+
+        /**
+         * 设置手机号码会在此方法中回调结果。
+         *
+         * @param context 应用的 Application Context。
+         * @param jpushMessage 设置手机号码返回的消息结果体，具体参考 JPushMessage 类的说明。
+         * @since 3.1.1
+         */
+        public onMobileNumberOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
     }
 }
