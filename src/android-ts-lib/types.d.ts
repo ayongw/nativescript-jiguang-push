@@ -48,7 +48,8 @@ declare namespace cn {
                     getErrorCode(): number;
 
                     /**
-                     * 开发者调用接口时传入的 sequence，通过该 sequence 开发者可以从开发者自己缓存中获取到对应的操作。
+                     * 开发者调用接口时传入的 sequence，
+                     * 通过该 sequence 开发者可以从开发者自己缓存中获取到对应的操作。
                      */
                     getSequence(): number;
 

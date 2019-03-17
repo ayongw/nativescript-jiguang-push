@@ -35,10 +35,6 @@ export class AliasTagsCallbackData {
 
 export class JiguangPush extends Common {
     private static JPushMessage_SUCCESSS_CODE = 0;
-    private static aliaTagsCallBacks: { [key: number]: any } = {};
-
-
-    // private const JPushInterface = cn.jpush.android.api.JPushInterface;
 
     /**
      * 获取SDK版本号
@@ -54,18 +50,23 @@ export class JiguangPush extends Common {
         cn.jpush.android.api.JPushInterface.init(application.android.context);
     }
 
+    private initReceiver(): void {
+        
+        let callback = (context: globalAndroid.content.Context, intent: globalAndroid.content.Intent) => {
+
+        };
+        
+        application.android.registerBroadcastReceiver("cn.jpush.android.intent.RECEIVE_MESSAGE", callback);
+        
+        
+    }
+
+
     /**
      * 获取别名
      */
     public static getAlias(): Promise<AliasTagsCallbackData> {
         let sequence = this.nextSequence();
-
-        // com.ayongw.nativescript.jiguangpush.SequenceMessageReceiver
-        //     .addSeqCallback(sequence,
-        //         function (respData: AliasTagsCallbackData) {
-        //             callback(respData);
-        //         });
-        // cn.jpush.android.api.JPushInterface.getAlias(application.android.context, sequence);
 
         return new Promise<AliasTagsCallbackData>((resolve, reject) => {
             com.ayongw.nativescript.jiguangpush.SequenceMessageReceiver

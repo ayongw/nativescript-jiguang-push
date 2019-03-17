@@ -1,4 +1,14 @@
 /* Include.gradle configuration: http://docs.nativescript.org/plugins/plugins#includegradle-specification */
+apply plugin: 'com.android.application'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+        mavenCentral()
+    }
+}
 
 android {
 	defaultConfig {
@@ -16,4 +26,5 @@ dependencies {
     // EXAMPLE: implementation "com.facebook.fresco:fresco:0.9.0+"
     implementation 'cn.jiguang.sdk:jpush:3.1.8'  // 此处以JPush 3.1.1 版本为例。
     implementation 'cn.jiguang.sdk:jcore:1.2.7'  // 此处以JCore 1.1.9 版本为例。
+    implementation 'com.github.ayongw:simple-message-center:1.1.0'
 }
