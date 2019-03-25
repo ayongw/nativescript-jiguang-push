@@ -1,7 +1,5 @@
 // import * as app from 'tns-core-modules/application';
 // import * as dialogs from 'tns-core-modules/ui/dialogs';
-import {AliasTagsCallbackData} from "./jiguang-push.android";
-
 /**
  * 用户进行别名、标签操作后返回的参数
  */
@@ -18,23 +16,23 @@ export class AliasTagCallBackData {
     /**
      * 开发者传或查询得到的 alias。
      */
-    alias: string;
+    alias?: string;
     /**
      * 开发者传或查询得到的 tags。
      */
-    tags: string[];
+    tags?: string[];
     /**
      * 开发者想要查询的 tag 与当前用户绑定的状态。
      */
-    tagCheckStateResult: boolean;
+    tagCheckStateResult?: boolean;
     /**
      * 开发者想要查询绑定状态的 tag。
      */
-    checkTag: string;
+    checkTag?: string;
     /**
      * 开发者调用设置接口时传入的手机号码。
      */
-    mobileNumber: string;
+    mobileNumber?: string;
 }
 
 
@@ -64,7 +62,7 @@ export class Common {
      * @param sequence  开发者调用接口时传入的 sequence，
      * @param callback 对应的请求sequence的回调函数
      */
-    static addAliasTagCallback(sequence: number, callback: (respData: AliasTagsCallbackData) => void): void {
+    static addAliasTagCallback(sequence: number, callback: (respData: AliasTagCallBackData) => void): void {
         this.aliasTagCallbacks[sequence] = callback;
     }
 

@@ -1,23 +1,10 @@
 /// <reference path="./android-ts-lib/types.d.ts" />
 /// <reference path="./android-ts-lib/message-center.d.ts" />
 
-import {Common, InitOption} from './jiguang-push.common';
+import {AliasTagCallBackData, Common, InitOption} from './jiguang-push.common';
 import * as application from 'tns-core-modules/application';
 
 // import * as utils from "utils/utils";
-
-/**
- * 操作标签、别名时的回调参数封装对象
- */
-export class AliasTagsCallbackData {
-    respCode: string;
-    seq: number;
-    alias: string;
-    checkTag: string;
-    mobileNumber: string;
-    tagCheckStateResult: boolean;
-    tags: string[];
-}
 
 export class JiguangPush extends Common {
     private static JPushMessage_SUCCESSS_CODE = 0;
@@ -175,7 +162,10 @@ export class JiguangPush extends Common {
                 let userInfo = message.getUserInfo();
                 let seq = userInfo.get(MSG_CONTS.FIELD_SEQUENCE);
 
-                JiguangPush.callAliasTagCallback(seq, userInfo);
+                // let callbackData: AliasTagsCallbackData = userInfo;
+
+                let callbackData: AliasTagCallBackData = Object.assign(new AliasTagCallBackData(), userInfo);
+                JiguangPush.callAliasTagCallback(seq, callbackData);
             }
         });
 
@@ -243,11 +233,11 @@ export class JiguangPush extends Common {
     /**
      * 获取别名
      */
-    public static getAlias(): Promise<AliasTagsCallbackData> {
+    public static getAlias(): Promise<AliasTagCallBackData> {
         let sequence = this.nextSequence();
 
-        return new Promise<AliasTagsCallbackData>((resolve, reject) => {
-            JiguangPush.addAliasTagCallback(sequence, (respData: AliasTagsCallbackData) => {
+        return new Promise<AliasTagCallBackData>((resolve, reject) => {
+            JiguangPush.addAliasTagCallback(sequence, (respData: AliasTagCallBackData) => {
                 resolve(respData);
                 JiguangPush.removeAliasTagCallback(sequence);
             });
@@ -260,11 +250,11 @@ export class JiguangPush extends Common {
      * 设置别名
      * @param alias 新的别名
      */
-    public static setAlias(alias: string): Promise<AliasTagsCallbackData> {
+    public static setAlias(alias: string): Promise<AliasTagCallBackData> {
         let sequence = this.nextSequence();
 
-        return new Promise<AliasTagsCallbackData>((resolve, reject) => {
-            JiguangPush.addAliasTagCallback(sequence, (respData: AliasTagsCallbackData) => {
+        return new Promise<AliasTagCallBackData>((resolve, reject) => {
+            JiguangPush.addAliasTagCallback(sequence, (respData: AliasTagCallBackData) => {
                 resolve(respData);
                 JiguangPush.removeAliasTagCallback(sequence);
             });
@@ -276,11 +266,11 @@ export class JiguangPush extends Common {
     /**
      * 删除别名
      */
-    public static deleteAlias(): Promise<AliasTagsCallbackData> {
+    public static deleteAlias(): Promise<AliasTagCallBackData> {
         let sequence = this.nextSequence();
 
-        return new Promise<AliasTagsCallbackData>((resolve, reject) => {
-            JiguangPush.addAliasTagCallback(sequence, (respData: AliasTagsCallbackData) => {
+        return new Promise<AliasTagCallBackData>((resolve, reject) => {
+            JiguangPush.addAliasTagCallback(sequence, (respData: AliasTagCallBackData) => {
                 resolve(respData);
                 JiguangPush.removeAliasTagCallback(sequence);
             });

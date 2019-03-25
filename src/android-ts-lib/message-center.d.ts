@@ -12,7 +12,7 @@ declare namespace com {
                     public static class: java.lang.Class<com.github.ayongw.simplemessagecenter.SimpleMessage>;
 
                     constructor();
-                    constructor(name: string, holder: any, userInfo: Map);
+                    constructor(name: string, holder: any, userInfo: Map<string, any>);
 
                     public getName(): string;
 
@@ -22,9 +22,9 @@ declare namespace com {
 
                     public setHolder(holder: any): void;
 
-                    public getUserInfo(): Map;
+                    public getUserInfo(): Map<string, any>;
 
-                    public setUserInfo(userInfo: Map): void;
+                    public setUserInfo(userInfo: Map<string, any>): void;
                 }
 
                 export class SimpleMessageObserver {
@@ -80,7 +80,7 @@ declare namespace com {
                      * @param holder
                      * @param userInfo 附加的用户信息
                      */
-                    public postMessage(msgName: string, holder: any, userInfo: Map): boolean;
+                    public postMessage(msgName: string, holder: any, userInfo: Map<string, any>): boolean;
                 }
             }
 
