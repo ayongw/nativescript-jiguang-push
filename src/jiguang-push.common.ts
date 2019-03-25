@@ -91,29 +91,29 @@ export class Common {
  * Jpush sdk 初始化参数
  */
 export class InitOption {
-    badge: boolean;
-    sound: boolean;
-    alert: boolean;
-    clearBadge: boolean;
+    badge?: boolean;
+    sound?: boolean;
+    alert?: boolean;
+    clearBadge?: boolean;
 
-    callbacks: {
+    callbacks?: {
         /**
          * SDK 向 JPush Server 注册所得到的注册 ID。
          * @param userInfo
          */
-        onRegistration: (userInfo: { [p: string]: any }) => void;
+        onRegistration?: (userInfo: { [p: string]: any }) => void;
         /**
          * 接受到了自定义消息 Push
          * @param userInfo
          */
-        onMessageReceived: (userInfo: { [p: string]: any }) => void;
+        onMessageReceived?: (userInfo: { [p: string]: any }) => void;
         /**
          * 收到了通知 Push。
          *
          * 如果消息内容为空，不会在通知栏上展示。但是此在接口中还是可以获取其它信息的。
          * @param userInfo
          */
-        onNotificationReceived: (userInfo: { [p: string]: any }) => void;
+        onNotificationReceived?: (userInfo: { [p: string]: any }) => void;
         /**
          * 用户点击了通知。 一般情况下，用户不需要配置此 receiver action。
          * 如果开发者在 AndroidManifest.xml 里未配置此 receiver action，
@@ -125,7 +125,7 @@ export class InitOption {
          *
          * @param userInfo
          */
-        onNotificationOpened: (userInfo: { [p: string]: any }) => void;
+        onNotificationOpened?: (userInfo: { [p: string]: any }) => void;
         /**
          * 用户点击了通知栏中自定义的按钮。（SDK 3.0.0 以上版本支持）
          * 使用普通通知的开发者不需要配置此 receiver action。
@@ -134,14 +134,14 @@ export class InitOption {
          *
          * @param userInfo
          */
-        onNotificationClickedAction: (userInfo: { [p: string]: any }) => void;
+        onNotificationClickedAction?: (userInfo: { [p: string]: any }) => void;
 
         /**
          *JPush 服务的连接状态发生变化。
          *
          * @param userInfo
          */
-        onConnectionChange: (userInfo: { [p: string]: any }) => void;
+        onConnectionChange?: (userInfo: { [p: string]: any }) => void;
     };
 }
 
