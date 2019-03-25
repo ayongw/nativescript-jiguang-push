@@ -10,30 +10,7 @@
  可以正常收到通知，用户点击打开应用主界面
  */
 
-declare namespace com {
-    export namespace ayongw {
-        export namespace nativescript {
-            export namespace jiguangpush {
-                export class SequenceMessageReceiver {
-                    static aliaTagsCallBacks: { [key: number]: any } = {};
 
-                    /**
-                     * 添加指定序列的回调函数
-                     * @param seq
-                     * @param callback
-                     */
-                    public static addSeqCallback(seq: number, callback: any): void;
-
-                    /**
-                     * 回调完成后用于删除回调函数
-                     * @param seq
-                     */
-                    public static removeSeqCallback(seq: number): void;
-                }
-            }
-        }
-    }
-}
 
 declare namespace cn {
     export namespace jpush {
