@@ -10,8 +10,6 @@
  可以正常收到通知，用户点击打开应用主界面
  */
 
-
-
 declare namespace cn {
     export namespace jpush {
         export namespace android {
@@ -660,54 +658,58 @@ declare namespace cn {
         }
     }
 }
+declare namespace cn {
+    export namespace jpush {
+        export namespace android {
+            export namespace service {
+                /**
+                 * 3.0.7 版本之后新增的回调方式。
+                 * 新的消息回调方式中相关回调类。
+                 * 新的 tag 与 alias 操作回调会在开发者定义的该类的子类中触发。
+                 * 手机号码设置的回调会在开发者定义的该类的子类中触发。
+                 *
+                 * 该类为回调父类，开发者需要继承该类并在 Manifest 中配置您对应实现的类，接口操作的结果会在您配置的类中的如下方法中回调。
+                 * @since 3.0.7
+                 */
+                export class JPushMessageReceiver extends globalAndroid.content.BroadcastReceiver {
+                    public static class: java.lang.Class<cn.jpush.android.service.JPushMessageReceiver>;
 
+                    public onReceive(context: globalAndroid.content.Context, intent: globalAndroid.content.Intent): void;
 
-declare namespace cn.jpush.android.service {
-    /**
-     * 3.0.7 版本之后新增的回调方式。
-     * 新的消息回调方式中相关回调类。
-     * 新的 tag 与 alias 操作回调会在开发者定义的该类的子类中触发。
-     * 手机号码设置的回调会在开发者定义的该类的子类中触发。
-     *
-     * 该类为回调父类，开发者需要继承该类并在 Manifest 中配置您对应实现的类，接口操作的结果会在您配置的类中的如下方法中回调。
-     * @since 3.0.7
-     */
-    export class JPushMessageReceiver extends android.content.BroadcastReceiver {
-        public static class: java.lang.Class<cn.jpush.android.service.JPushMessageReceiver>;
+                    /**
+                     * tag 增删查改的操作会在此方法中回调结果。
+                     *
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage tag 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
+                     * @since 3.0.7
+                     */
+                    public onTagOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
-        public onReceive(context: globalAndroid.content.Context, intent: android.content.Intent): void;
+                    /**
+                     *  查询某个 tag 与当前用户的绑定状态的操作会在此方法中回调结果。
+                     *
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage check tag 与当前用户绑定状态的操作返回的消息结果体，具体参考 JPushMessage 类的说明。
+                     */
+                    public onCheckTagOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
-        /**
-         * tag 增删查改的操作会在此方法中回调结果。
-         *
-         * @param context 应用的 Application Context。
-         * @param jpushMessage tag 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
-         * @since 3.0.7
-         */
-        public onTagOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
+                    /**
+                     * alias 相关的操作会在此方法中回调结果。
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage alias 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
+                     */
+                    public onAliasOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
 
-        /**
-         *  查询某个 tag 与当前用户的绑定状态的操作会在此方法中回调结果。
-         *
-         * @param context 应用的 Application Context。
-         * @param jpushMessage check tag 与当前用户绑定状态的操作返回的消息结果体，具体参考 JPushMessage 类的说明。
-         */
-        public onCheckTagOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
-
-        /**
-         * alias 相关的操作会在此方法中回调结果。
-         * @param context 应用的 Application Context。
-         * @param jpushMessage alias 相关操作返回的消息结果体，具体参考 JPushMessage 类的说明。
-         */
-        public onAliasOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
-
-        /**
-         * 设置手机号码会在此方法中回调结果。
-         *
-         * @param context 应用的 Application Context。
-         * @param jpushMessage 设置手机号码返回的消息结果体，具体参考 JPushMessage 类的说明。
-         * @since 3.1.1
-         */
-        public onMobileNumberOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
+                    /**
+                     * 设置手机号码会在此方法中回调结果。
+                     *
+                     * @param context 应用的 Application Context。
+                     * @param jpushMessage 设置手机号码返回的消息结果体，具体参考 JPushMessage 类的说明。
+                     * @since 3.1.1
+                     */
+                    public onMobileNumberOperatorResult(context: globalAndroid.content.Context, jpushMessage: cn.jpush.android.api.JPushMessage): void;
+                }
+            }
+        }
     }
 }
