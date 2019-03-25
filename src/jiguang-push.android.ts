@@ -162,7 +162,7 @@ export class JiguangPush extends Common {
                 let userInfo = message.getUserInfo();
                 let seq = userInfo.get(MSG_CONTS.FIELD_SEQUENCE);
 
-                // let callbackData: AliasTagsCallbackData = userInfo;
+                // let callbackData: AliasTagCallBackData = userInfo;
 
                 let callbackData: AliasTagCallBackData = Object.assign(new AliasTagCallBackData(), userInfo);
                 JiguangPush.callAliasTagCallback(seq, callbackData);

@@ -19,17 +19,17 @@ export declare class JiguangPush extends Common {
     /**
      * 获取别名
      */
-    public static getAlias(): Promise<AliasTagsCallbackData>;
+    public static getAlias(): Promise<AliasTagCallBackData>;
 
     /**
      * 设置别名
      * @param alias 新的别名
      */
-    public static setAlias(alias: string): Promise<AliasTagsCallbackData>;
+    public static setAlias(alias: string): Promise<AliasTagCallBackData>;
 
     /**
      * 删除别名
      */
-    public static deleteAlias(): Promise<AliasTagsCallbackData>;
+    public static deleteAlias(): Promise<AliasTagCallBackData>;
 
 }
