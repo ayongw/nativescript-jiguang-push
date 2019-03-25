@@ -179,10 +179,16 @@ export class JiguangPush extends Common {
             }
         });
 
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, MSG_CONTS.OPERATE_MESSAGE_HOLDER, messageObserver);
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, MSG_CONTS.OPERATE_MESSAGE_HOLDER, messageObserver);
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, MSG_CONTS.OPERATE_MESSAGE_HOLDER, messageObserver);
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, MSG_CONTS.OPERATE_MESSAGE_HOLDER, messageObserver);
+        let operateHolder = MSG_CONTS.OPERATE_MESSAGE_HOLDER;
+        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, operateHolder);
+        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, operateHolder);
+        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, operateHolder);
+        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, operateHolder);
+
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, operateHolder, messageObserver);
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, operateHolder, messageObserver);
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, operateHolder, messageObserver);
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, operateHolder, messageObserver);
 
 
         let msgNameOnRegistration = MSG_CONTS.MSG_ON_JPUSH_ACTION_PREFIX + api.ACTION_REGISTRATION_ID;
@@ -197,6 +203,7 @@ export class JiguangPush extends Common {
             onMessage(message: com.github.ayongw.simplemessagecenter.SimpleMessage): void {
                 let msgName = message.getName();
                 let userInfo = message.getUserInfo();
+                console.log("接收到消息：" + msgName);
 
                 if (msgNameOnRegistration === msgName) {
                     JiguangPush.callbacks.onRegistration(userInfo);
@@ -215,6 +222,21 @@ export class JiguangPush extends Common {
                 }
             }
         });
+        let apiHolder = MSG_CONTS.JPUSH_API_MESSAGE_HOLDER;
+
+        messageCenter.removeAllObserver(msgNameOnRegistration, apiHolder);
+        messageCenter.removeAllObserver(msgNameOnConnectionChange, apiHolder);
+        messageCenter.removeAllObserver(msgNameOnNotificationReceived, apiHolder);
+        messageCenter.removeAllObserver(msgNameOnNotificationOpened, apiHolder);
+        messageCenter.removeAllObserver(msgNameOnNotificationClicked, apiHolder);
+        messageCenter.removeAllObserver(msgNameOnMessageReceived, apiHolder);
+
+        messageCenter.addObserver(msgNameOnRegistration, apiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnConnectionChange, apiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnNotificationReceived, apiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnNotificationOpened, apiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnNotificationClicked, apiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnMessageReceived, apiHolder, coreApiObserver);
     }
 
 
