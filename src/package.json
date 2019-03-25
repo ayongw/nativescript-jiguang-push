@@ -1,6 +1,6 @@
 {
     "name": "nativescript-jiguang-push",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "description": "a wrapper for JPush sdk",
     "main": "jiguang-push",
     "typings": "index.d.ts",
