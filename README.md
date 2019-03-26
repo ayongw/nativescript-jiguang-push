@@ -13,11 +13,34 @@ In case you develop UI plugin, this is where you can add some screenshots.
 Describe the prerequisites that the user need to have installed before using your plugin. See [nativescript-firebase plugin](https://github.com/eddyverbruggen/nativescript-plugin-firebase) for example.
 
 ## Installation
+need to config the android receiver
 
-Describe your plugin installation steps. Ideally it would be something like:
+```xml
+<application>
+    <!--JPush api核心消息接受器-->
+    <receiver android:name="com.github.ayongw.jpushreceiver.MessageCenterJPushApiReceiver"
+              android:exported="false"
+              android:enabled="true">
+        <intent-filter>
+            <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!--Required  用户注册SDK的intent-->
+            <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!--Required  用户接收SDK消息的intent-->
+            <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!--Required  用户接收SDK通知栏信息的intent-->
+            <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!--Required  用户打开自定义通知栏的intent-->
+            <action android:name="cn.jpush.android.intent.CONNECTION" /><!-- 接收网络变化 连接/断开 since 1.6.3 -->
 
-```javascript
-tns plugin add nativescript-jiguang-push
+            <category android:name="__PACKAGE__" />
+        </intent-filter>
+    </receiver>
+
+    <!--用于接收种操作返回-->
+    <receiver android:name="com.github.ayongw.jpushreceiver.MessageCenterJPushOperateMessageReceiver">
+        <intent-filter>
+            <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+
+            <category android:name="__PACKAGE__" />
+        </intent-filter>
+    </receiver>
+</application>
 ```
 
 ## Usage 

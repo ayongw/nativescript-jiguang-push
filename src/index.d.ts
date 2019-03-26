@@ -1,5 +1,4 @@
-import {Common, InitOption} from './jiguang-push.common';
-import {AliasTagsCallbackData} from "./jiguang-push.android";
+import {AliasTagCallBackData, Common, InitOption} from './jiguang-push.common';
 
 export declare class JiguangPush extends Common {
     // define your typings manually

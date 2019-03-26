@@ -26,6 +26,6 @@ dependencies {
     // EXAMPLE: implementation "com.facebook.fresco:fresco:0.9.0+"
     implementation 'cn.jiguang.sdk:jpush:3.1.8'  // 此处以JPush 3.1.1 版本为例。
     implementation 'cn.jiguang.sdk:jcore:1.2.7'  // 此处以JCore 1.1.9 版本为例。
-    implementation 'com.github.ayongw:simple-message-center:1.1.0'
-    implementation 'com.github.ayongw:jpush-android-receiver:0.0.2'
+    implementation 'com.github.ayongw:simple-message-center:1.3.0'
+    implementation 'com.github.ayongw:jpush-android-receiver:0.0.3'
 }

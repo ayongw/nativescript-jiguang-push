@@ -47,7 +47,7 @@ declare namespace com {
                     /**
                      * 添加消息监听对象
                      * @param msgName 消息名称
-                     * @param holder 消息发送者
+                     * @param holder 消息发送者标识
                      * @param observer 消息监听对象，用于算是消息的
                      * @return 消息监听对象id
                      */
@@ -56,31 +56,38 @@ declare namespace com {
                     /**
                      * 移除指定消息发送者下的消息监听对象
                      * @param msgName
-                     * @param holder
+                     * @param holder 消息发送者标识
                      * @param observerId 消息监听对象id
                      */
-                    public removeObserver(msgName: string, holder: any, observerId: string): boolean;
+                    public removeObserver(msgName: string, holder: any, observerId: string): number;
 
                     /**
                      * 移除指定监听对象下、指定消息的所有的监听对象
                      * @param msgName
-                     * @param holder
+                     * @param holder 消息发送者标识
                      */
-                    public removeAllObserver(msgName: string, holder: any): boolean;
+                    public removeAllObserver(msgName: string, holder: any): number;
+
+                    /**
+                     * 一次移除holder对象上的所有监听，但不支持移除全部（holder为null）
+                     * @param holder  消息发送者标识
+                     */
+                    public removeObserversByHolder(holder: any): number;
 
                     /**
                      * 发送一个消息
                      * @param msgName
-                     * @param holder
+                     * @param holder 消息发送者标识
                      */
-                    public postMessage(msgName: string, holder: any): boolean;
+                    public postMessage(msgName: string, holder: any): number;
+
                     /**
                      * 发送一个消息，并附加用户信息
                      * @param msgName
-                     * @param holder
+                     * @param holder 消息发送者标识
                      * @param userInfo 附加的用户信息
                      */
-                    public postMessage(msgName: string, holder: any, userInfo: Map<string, any>): boolean;
+                    public postMessage(msgName: string, holder: any, userInfo: Map<string, any>): number;
                 }
             }
 
