@@ -1,7 +1,7 @@
 /// <reference path="./android-ts-lib/types.d.ts" />
 /// <reference path="./android-ts-lib/message-center.d.ts" />
 
-import { AliasTagCallBackData, Common, InitOption } from './jiguang-push.common';
+import {AliasTagCallBackData, Common, InitOption} from './jiguang-push.common';
 import * as application from 'tns-core-modules/application';
 
 // import * as utils from "utils/utils";
@@ -125,10 +125,8 @@ export class JiguangPush extends Common {
             let api = cn.jpush.android.api.JPushInterface;
             // 唯一标识消息的 ID EXTRA_MSG_ID
 
-            let logData = {
-                connected: userInfo[api.EXTRA_CONNECTION_CHANGE], // 获取当前 JPush 服务的连接状态。
-            };
-            console.dir(logData, "JPush当前的连接状态 ");
+            let connected = userInfo[api.EXTRA_CONNECTION_CHANGE];
+            console.log("JPush当前连接状态：" + connected);
         }
     };
 
@@ -149,7 +147,7 @@ export class JiguangPush extends Common {
         let iter = mapInfo.entrySet().iterator();
         while (iter.hasNext()) {
             let entry = iter.next();
-            console.log("==> key:" + entry.getKey() + " val：" + entry.getValue());
+            // console.log("==> key:" + entry.getKey() + " val：" + entry.getValue());
             userInfo[entry.getKey()] = entry.getValue();
         }
 
@@ -182,10 +180,10 @@ export class JiguangPush extends Common {
         let messageObserver = new com.github.ayongw.simplemessagecenter.SimpleMessageObserver({
             onMessage(message: com.github.ayongw.simplemessagecenter.SimpleMessage): void {
                 let userInfoMap = message.getUserInfo();
-                console.log("接收到消息类型是：" + message.getName());
+                // console.log("接收到消息类型是：" + message.getName());
                 let userInfo = JiguangPush._javaMapToJsObject(userInfoMap);
-                console.log("解析出的消息是：");
-                console.dir(userInfo);
+                // console.log("解析出的消息是：");
+                // console.dir(userInfo);
 
                 let seq = userInfo.get(MSG_CONTS.FIELD_SEQUENCE);
 
@@ -195,10 +193,12 @@ export class JiguangPush extends Common {
         });
 
         let operateHolder = MSG_CONTS.OPERATE_MESSAGE_HOLDER;
-        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, operateHolder);
-        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, operateHolder);
-        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, operateHolder);
-        messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, operateHolder);
+        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, operateHolder);
+        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, operateHolder);
+        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, operateHolder);
+        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, operateHolder);
+        let removeCount = messageCenter.removeObserversByHolder(operateHolder);
+        console.log("添加监听前，成功移除 " + operateHolder + " 下的监听数:" + removeCount);
 
         messageCenter.addObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, operateHolder, messageObserver);
         messageCenter.addObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, operateHolder, messageObserver);
@@ -218,10 +218,10 @@ export class JiguangPush extends Common {
             onMessage(message: com.github.ayongw.simplemessagecenter.SimpleMessage): void {
                 let msgName = message.getName();
                 let messageUserInfoMap = message.getUserInfo();
-                console.log("接收到消息类型是：" + msgName);
+                // console.log("接收到消息类型是：" + msgName);
                 let userInfo = JiguangPush._javaMapToJsObject(messageUserInfoMap);
-                console.log("解析出的消息是：");
-                console.dir(userInfo);
+                // console.log("解析出的消息是：");
+                // console.dir(userInfo);
 
                 if (msgNameOnRegistration === msgName) {
                     JiguangPush.callbacks.onRegistration(userInfo);
@@ -242,12 +242,15 @@ export class JiguangPush extends Common {
         });
         let apiHolder = MSG_CONTS.JPUSH_API_MESSAGE_HOLDER;
 
-        messageCenter.removeAllObserver(msgNameOnRegistration, apiHolder);
-        messageCenter.removeAllObserver(msgNameOnConnectionChange, apiHolder);
-        messageCenter.removeAllObserver(msgNameOnNotificationReceived, apiHolder);
-        messageCenter.removeAllObserver(msgNameOnNotificationOpened, apiHolder);
-        messageCenter.removeAllObserver(msgNameOnNotificationClicked, apiHolder);
-        messageCenter.removeAllObserver(msgNameOnMessageReceived, apiHolder);
+        // messageCenter.removeAllObserver(msgNameOnRegistration, apiHolder);
+        // messageCenter.removeAllObserver(msgNameOnConnectionChange, apiHolder);
+        // messageCenter.removeAllObserver(msgNameOnNotificationReceived, apiHolder);
+        // messageCenter.removeAllObserver(msgNameOnNotificationOpened, apiHolder);
+        // messageCenter.removeAllObserver(msgNameOnNotificationClicked, apiHolder);
+        // messageCenter.removeAllObserver(msgNameOnMessageReceived, apiHolder);
+
+        removeCount = messageCenter.removeObserversByHolder(apiHolder);
+        console.log("添加监听前，成功移除 " + apiHolder + " 下的监听数:" + removeCount);
 
         messageCenter.addObserver(msgNameOnRegistration, apiHolder, coreApiObserver);
         messageCenter.addObserver(msgNameOnConnectionChange, apiHolder, coreApiObserver);
