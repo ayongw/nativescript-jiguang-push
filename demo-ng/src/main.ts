@@ -16,7 +16,7 @@ if (application.ios) {
 application.on(application.launchEvent, (eventData: LaunchEventData) => {
     console.log('application launche event fire');
     // console.dir(eventData);
-    JiguangPush.init(null);
+    JiguangPush.init({});
 });
 
 application.on(application.suspendEvent, (eventData: ApplicationEventData) => {
@@ -26,18 +26,18 @@ application.on(application.suspendEvent, (eventData: ApplicationEventData) => {
 
 application.on(application.resumeEvent, (eventData: ApplicationEventData) => {
     console.log('application resumeEvent fire');
-    console.dir(eventData);
+    // console.dir(eventData);
 });
 
 
-if (application.android) {
-    let currentContext: android.content.Context = application.android.currentContext;
-    let pmanager: android.content.pm.PackageManager = currentContext.getPackageManager();
-    let applicationInfo: android.content.pm.ApplicationInfo = pmanager.getApplicationInfo(currentContext.getPackageName(),
-        android.content.pm.PackageManager.GET_META_DATA);
-    let appId = applicationInfo.metaData.getString("JPUSH_APPID");
-
-}
+// if (application.android) {
+//     let currentContext: globalAndroid.content.Context = application.android.currentContext;
+//     let pmanager: android.content.pm.PackageManager = currentContext.getPackageManager();
+//     let applicationInfo: android.content.pm.ApplicationInfo = pmanager.getApplicationInfo(currentContext.getPackageName(),
+//         android.content.pm.PackageManager.GET_META_DATA);
+//     let appId = applicationInfo.metaData.getString("JPUSH_APPID");
+//     console.log("当前应用的appId:" + appId);
+// }
 
 // A traditional NativeScript application starts by initializing global objects,
 // setting up global CSS rules, creating, and navigating to the main page.

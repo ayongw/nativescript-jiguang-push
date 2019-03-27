@@ -21,13 +21,18 @@
         "plugin.tscwatch": "npm run tsc -- -w",
         "demo.ios": "npm run tsc && cd ../demo && tns run ios --syncAllFiles --emulator",
         "demo.android": "npm run tsc && cd ../demo && tns run android --syncAllFiles --emulator",
+        "demo.android-ng": "npm run tsc && cd ../demo-ng && tns run android --syncAllFiles --emulator",
         "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
+        "demong.reset": "cd ../demo-ng && npx rimraf -- hooks node_modules platforms package-lock.json",
         "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-jiguang-push && tns plugin add ../src",
         "plugin.prepare-ng": "npm run build && cd ../demo-ng && tns plugin remove nativescript-jiguang-push && tns plugin add ../src",
-        "plugin.pack-ng": "npm run build && cd ../publish && ./pack.sh && cd ../demo-ng && tns plugin remove nativescript-jiguang-push && tns plugin add ../publish/package/nativescript-jiguang-push-0.0.1.tgz",
+        "update.dep-ng": "cd ../demo-ng && tns plugin remove nativescript-jiguang-push && tns plugin add ../publish/package/nativescript-jiguang-push-0.0.1.tgz",
+        "plugin.pack-ng": "npm run build && cd ../publish && ./pack.sh && npm run update.dep-ng",
         "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i",
+        "clean-ng": "npm run demong.reset && npx rimraf -- node_modules package-lock.json && npm i",
         "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
-        "pack": "npm run build.native && npm pack"
+        "pack": "npm run build.native && npm pack",
+        "run.demo.ng": "npm run plugin.prepare-ng && npm run demo.android-ng"
     },
     "keywords": [
         "NativeScript",

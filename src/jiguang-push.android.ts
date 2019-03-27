@@ -1,7 +1,7 @@
 /// <reference path="./android-ts-lib/types.d.ts" />
 /// <reference path="./android-ts-lib/message-center.d.ts" />
 
-import {AliasTagCallBackData, Common, InitOption} from './jiguang-push.common';
+import { AliasTagCallBackData, Common, InitOption } from './jiguang-push.common';
 import * as application from 'tns-core-modules/application';
 
 // import * as utils from "utils/utils";
@@ -64,7 +64,7 @@ export class JiguangPush extends Common {
                 notificationId: userInfo[api.EXTRA_NOTIFICATION_ID], // 通知栏的 Notification ID，可以用于清除 Notification
                 htmlPath: userInfo[api.EXTRA_RICHPUSH_HTML_PATH], // 富媒体通知推送下载的 HTML 的文件路径，用于展现 WebView。
                 htmlRes: userInfo[api.EXTRA_RICHPUSH_HTML_RES], // 富媒体通知推送下载的图片资源的文件名，多个文件名用 “，” 分开。
-                                                                // 与 “JPushInterface.EXTRA_RICHPUSH_HTML_PATH” 位于同一个路径。
+                // 与 “JPushInterface.EXTRA_RICHPUSH_HTML_PATH” 位于同一个路径。
                 bigText: userInfo[api.EXTRA_BIG_TEXT], // 大文本通知样式中大文本的内容。
                 bigPicPath: userInfo[api.EXTRA_BIG_PIC_PATH], // 大图片通知样式中大图片的路径/地址。可支持本地图片的路径，或者填网络图片地址。
                 inboxJson: userInfo[api.EXTRA_INBOX], // 收件箱通知样式中收件箱的内容。json 的每个 key 对应的 value 会被当作文本条目逐条展示。
@@ -140,6 +140,23 @@ export class JiguangPush extends Common {
     }
 
     /**
+     * 只转换一层，内部不转换
+     * @param mapInfo
+     * @private
+     */
+    private static _javaMapToJsObject(mapInfo: java.util.Map<string, any>): any {
+        let userInfo = {};
+        let iter = mapInfo.entrySet().iterator();
+        while (iter.hasNext()) {
+            let entry = iter.next();
+            console.log("==> key:" + entry.getKey() + " val：" + entry.getValue());
+            userInfo[entry.getKey()] = entry.getValue();
+        }
+
+        return userInfo;
+    }
+
+    /**
      * 初始化sdk
      */
     public static init(options: InitOption): void {
@@ -148,10 +165,15 @@ export class JiguangPush extends Common {
         this.initMessageReceiver();
 
         // 初始化连接
+        console.log("prepare to init JPush connect");
         cn.jpush.android.api.JPushInterface.init(application.android.context);
     }
-
+    /**
+     * 初始化监听对象
+     */
     private static initMessageReceiver(): void {
+        console.log("prepare to init android message receivers");
+
         let MSG_CONTS = com.github.ayongw.jpushreceiver.JPushMessageCenterConts;
         let messageCenter = com.github.ayongw.simplemessagecenter.SimpleMessageCenter.getDefaultCenter();
         let api = cn.jpush.android.api.JPushInterface;
@@ -159,10 +181,13 @@ export class JiguangPush extends Common {
         // 用户操作消息监听
         let messageObserver = new com.github.ayongw.simplemessagecenter.SimpleMessageObserver({
             onMessage(message: com.github.ayongw.simplemessagecenter.SimpleMessage): void {
-                let userInfo = message.getUserInfo();
-                let seq = userInfo.get(MSG_CONTS.FIELD_SEQUENCE);
+                let userInfoMap = message.getUserInfo();
+                console.log("接收到消息类型是：" + message.getName());
+                let userInfo = JiguangPush._javaMapToJsObject(userInfoMap);
+                console.log("解析出的消息是：");
+                console.dir(userInfo);
 
-                // let callbackData: AliasTagCallBackData = userInfo;
+                let seq = userInfo.get(MSG_CONTS.FIELD_SEQUENCE);
 
                 let callbackData: AliasTagCallBackData = Object.assign(new AliasTagCallBackData(), userInfo);
                 JiguangPush.callAliasTagCallback(seq, callbackData);
@@ -192,8 +217,11 @@ export class JiguangPush extends Common {
         let coreApiObserver = new com.github.ayongw.simplemessagecenter.SimpleMessageObserver({
             onMessage(message: com.github.ayongw.simplemessagecenter.SimpleMessage): void {
                 let msgName = message.getName();
-                let userInfo = message.getUserInfo();
-                console.log("接收到消息：" + msgName);
+                let messageUserInfoMap = message.getUserInfo();
+                console.log("接收到消息类型是：" + msgName);
+                let userInfo = JiguangPush._javaMapToJsObject(messageUserInfoMap);
+                console.log("解析出的消息是：");
+                console.dir(userInfo);
 
                 if (msgNameOnRegistration === msgName) {
                     JiguangPush.callbacks.onRegistration(userInfo);
