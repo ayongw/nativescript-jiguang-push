@@ -176,6 +176,10 @@ export class JiguangPush extends Common {
         let messageCenter = com.github.ayongw.simplemessagecenter.SimpleMessageCenter.getDefaultCenter();
         let api = cn.jpush.android.api.JPushInterface;
 
+        let jpushApiHolder = MSG_CONTS.JPUSH_API_MESSAGE_HOLDER;
+        let removeCount = messageCenter.removeObserversByHolder(jpushApiHolder);
+        console.log("添加监听前，移除 " + jpushApiHolder + " 下的历史监听数:" + removeCount);
+
         // 用户操作消息监听
         let messageObserver = new com.github.ayongw.simplemessagecenter.SimpleMessageObserver({
             onMessage(message: com.github.ayongw.simplemessagecenter.SimpleMessage): void {
@@ -192,18 +196,10 @@ export class JiguangPush extends Common {
             }
         });
 
-        let operateHolder = MSG_CONTS.OPERATE_MESSAGE_HOLDER;
-        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, operateHolder);
-        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, operateHolder);
-        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, operateHolder);
-        // messageCenter.removeAllObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, operateHolder);
-        let removeCount = messageCenter.removeObserversByHolder(operateHolder);
-        console.log("添加监听前，成功移除 " + operateHolder + " 下的监听数:" + removeCount);
-
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, operateHolder, messageObserver);
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, operateHolder, messageObserver);
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, operateHolder, messageObserver);
-        messageCenter.addObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, operateHolder, messageObserver);
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_ALIAS_OPERATOR_RESULT, jpushApiHolder, messageObserver);
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, jpushApiHolder, messageObserver);
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, jpushApiHolder, messageObserver);
+        messageCenter.addObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, jpushApiHolder, messageObserver);
 
 
         let msgNameOnRegistration = MSG_CONTS.MSG_ON_JPUSH_ACTION_PREFIX + api.ACTION_REGISTRATION_ID;
@@ -240,24 +236,13 @@ export class JiguangPush extends Common {
                 }
             }
         });
-        let apiHolder = MSG_CONTS.JPUSH_API_MESSAGE_HOLDER;
 
-        // messageCenter.removeAllObserver(msgNameOnRegistration, apiHolder);
-        // messageCenter.removeAllObserver(msgNameOnConnectionChange, apiHolder);
-        // messageCenter.removeAllObserver(msgNameOnNotificationReceived, apiHolder);
-        // messageCenter.removeAllObserver(msgNameOnNotificationOpened, apiHolder);
-        // messageCenter.removeAllObserver(msgNameOnNotificationClicked, apiHolder);
-        // messageCenter.removeAllObserver(msgNameOnMessageReceived, apiHolder);
-
-        removeCount = messageCenter.removeObserversByHolder(apiHolder);
-        console.log("添加监听前，成功移除 " + apiHolder + " 下的监听数:" + removeCount);
-
-        messageCenter.addObserver(msgNameOnRegistration, apiHolder, coreApiObserver);
-        messageCenter.addObserver(msgNameOnConnectionChange, apiHolder, coreApiObserver);
-        messageCenter.addObserver(msgNameOnNotificationReceived, apiHolder, coreApiObserver);
-        messageCenter.addObserver(msgNameOnNotificationOpened, apiHolder, coreApiObserver);
-        messageCenter.addObserver(msgNameOnNotificationClicked, apiHolder, coreApiObserver);
-        messageCenter.addObserver(msgNameOnMessageReceived, apiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnRegistration, jpushApiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnConnectionChange, jpushApiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnNotificationReceived, jpushApiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnNotificationOpened, jpushApiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnNotificationClicked, jpushApiHolder, coreApiObserver);
+        messageCenter.addObserver(msgNameOnMessageReceived, jpushApiHolder, coreApiObserver);
     }
 
 

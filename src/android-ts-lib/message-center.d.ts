@@ -102,7 +102,9 @@ declare namespace com {
             export namespace jpushreceiver {
                 export class JPushMessageCenterConts {
                     public static class: java.lang.Class<com.github.ayongw.jpushreceiver.JPushMessageCenterConts>;
-
+                    /**
+                     * 不建议使用的参数
+                     */
                     public static OPERATE_MESSAGE_HOLDER: string;
                     public static JPUSH_API_MESSAGE_HOLDER: string;
 
