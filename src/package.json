@@ -22,7 +22,6 @@
         "demo.ios": "npm run tsc && cd ../demo-ng && tns run ios --syncAllFiles --emulator",
         "demo.android": "npm run tsc && cd ../demo-ng && tns run android --syncAllFiles --emulator",
         "demo.reset": "cd ../demo-ng && npx rimraf -- hooks node_modules platforms package-lock.json",
-        "demong.reset": "cd ../demo-ng && npx rimraf -- hooks node_modules platforms package-lock.json",
         "plugin.prepare": "npm run build && cd ../demo-ng && tns plugin remove nativescript-jiguang-push && tns plugin add ../src",
         "update.dep-ng": "cd ../demo-ng && tns plugin remove nativescript-jiguang-push && tns plugin add ../publish/package/nativescript-jiguang-push-0.0.1.tgz",
         "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i",
