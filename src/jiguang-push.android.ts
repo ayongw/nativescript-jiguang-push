@@ -43,8 +43,8 @@ export class JiguangPush extends Common {
                 extraJson: userInfo[api.EXTRA_EXTRA],
                 msgId: userInfo[api.EXTRA_MSG_ID]
             };
-            console.log("接受到自定义消息");
-            console.dir(logData);
+            // console.log("接受到自定义消息");
+            console.dir("user received the custom message", logData);
         },
         /**
          * 收到了通知 Push。
@@ -71,8 +71,8 @@ export class JiguangPush extends Common {
                 priority: userInfo[api.EXTRA_NOTI_PRIORITY], // 通知的优先级。默认为 0，范围为 -2～2，其他值将会被忽略而采用默认。
                 category: userInfo[api.EXTRA_NOTI_CATEGORY], // 通知分类。完全依赖 rom 厂商对每个 category 的处理策略，比如通知栏的排序。
             };
-            console.log("接受到通知消息");
-            console.dir(logData);
+            // console.log("接受到通知消息");
+            console.dir("user received the notification", logData);
         },
         /**
          * 用户点击了通知。 一般情况下，用户不需要配置此 receiver action。
@@ -96,8 +96,8 @@ export class JiguangPush extends Common {
                 msgId: userInfo[api.EXTRA_MSG_ID], // 唯一标识调整消息的 ID，可用于上报统计等。
                 notificationId: userInfo[api.EXTRA_NOTIFICATION_ID], // 通知栏的 Notification ID，可以用于清除 Notification
             };
-            console.log("用户打开消息通知");
-            console.dir(logData);
+            // console.log("用户打开消息通知");
+            console.dir("user opened the notification", logData);
         },
         /**用户点击了通知栏中自定义的按钮。（SDK 3.0.0 以上版本支持）
          * 使用普通通知的开发者不需要配置此 receiver action。
@@ -111,10 +111,11 @@ export class JiguangPush extends Common {
             // 唯一标识消息的 ID EXTRA_MSG_ID
 
             let logData = {
-                actionExtra: userInfo[api.EXTRA_NOTIFICATION_ACTION_EXTRA], // 获取通知栏按钮点击事件携带的附加信息。对应使用 MultiActionsNotificationBuilder.addJPushAction 添加的按钮信息。
+                actionExtra: userInfo[api.EXTRA_NOTIFICATION_ACTION_EXTRA], // 获取通知栏按钮点击事件携带的附加信息。
+                        // 对应使用 MultiActionsNotificationBuilder.addJPushAction 添加的按钮信息。
             };
-            console.log("用户点击了通知栏按键");
-            console.dir(logData);
+            // console.log("用户点击了通知栏按键");
+            console.dir("user clicked notificatin bar buttons ", logData);
         },
         /**
          *JPush 服务的连接状态发生变化。
@@ -123,10 +124,9 @@ export class JiguangPush extends Common {
          */
         onConnectionChange: function (userInfo: { [key: string]: any }): void {
             let api = cn.jpush.android.api.JPushInterface;
-            // 唯一标识消息的 ID EXTRA_MSG_ID
 
             let connected = userInfo[api.EXTRA_CONNECTION_CHANGE];
-            console.log("JPush当前连接状态：" + connected);
+            console.log("current JPush connect status：" + connected);
         }
     };
 
@@ -147,8 +147,10 @@ export class JiguangPush extends Common {
         let iter = mapInfo.entrySet().iterator();
         while (iter.hasNext()) {
             let entry = iter.next();
-            // console.log("==> key:" + entry.getKey() + " val：" + entry.getValue());
-            userInfo[entry.getKey()] = entry.getValue();
+            let fkey = entry.getKey();
+            let fval = entry.getValue();
+            // console.log("=====> ", fkey, " : ", fval);
+            userInfo[fkey] = fval;
         }
 
         return userInfo;
@@ -170,7 +172,7 @@ export class JiguangPush extends Common {
      * 初始化监听对象
      */
     private static initMessageReceiver(): void {
-        console.log("prepare to init android message receivers");
+        console.log("preparing to init android message receivers");
 
         let MSG_CONTS = com.github.ayongw.jpushreceiver.JPushMessageCenterConts;
         let messageCenter = com.github.ayongw.simplemessagecenter.SimpleMessageCenter.getDefaultCenter();
@@ -178,7 +180,8 @@ export class JiguangPush extends Common {
 
         let jpushApiHolder = MSG_CONTS.JPUSH_API_MESSAGE_HOLDER;
         let removeCount = messageCenter.removeObserversByHolder(jpushApiHolder);
-        console.log("添加监听前，移除 " + jpushApiHolder + " 下的历史监听数:" + removeCount);
+        // console.info("添加监听前，移除Holder " + jpushApiHolder + " 下的历史监听数:" + removeCount);
+        console.info("successfully removed", removeCount, " obbservers from", jpushApiHolder, "before add new observers.");
 
         // 用户操作消息监听
         let messageObserver = new com.github.ayongw.simplemessagecenter.SimpleMessageObserver({
@@ -187,7 +190,7 @@ export class JiguangPush extends Common {
                 // console.log("接收到消息类型是：" + message.getName());
                 let userInfo = JiguangPush._javaMapToJsObject(userInfoMap);
                 // console.log("解析出的消息是：");
-                // console.dir(userInfo);
+                // console.dir("解析出的用户操作消息是：", userInfo);
 
                 let seq = userInfo.get(MSG_CONTS.FIELD_SEQUENCE);
 
@@ -200,6 +203,7 @@ export class JiguangPush extends Common {
         messageCenter.addObserver(MSG_CONTS.MSG_ON_CHECK_TAG_OPERATOR_RESULT, jpushApiHolder, messageObserver);
         messageCenter.addObserver(MSG_CONTS.MSG_ON_MOBILE_NUMBER_OPERATOR_RESULT, jpushApiHolder, messageObserver);
         messageCenter.addObserver(MSG_CONTS.MSG_ON_TAG_OPERATOR_RESULT, jpushApiHolder, messageObserver);
+        console.info("add", 4, "observers for user operation.");
 
 
         let msgNameOnRegistration = MSG_CONTS.MSG_ON_JPUSH_ACTION_PREFIX + api.ACTION_REGISTRATION_ID;
@@ -217,7 +221,7 @@ export class JiguangPush extends Common {
                 // console.log("接收到消息类型是：" + msgName);
                 let userInfo = JiguangPush._javaMapToJsObject(messageUserInfoMap);
                 // console.log("解析出的消息是：");
-                // console.dir(userInfo);
+                // console.dir("解析出的JPush核心消息是：", userInfo);
 
                 if (msgNameOnRegistration === msgName) {
                     JiguangPush.callbacks.onRegistration(userInfo);
@@ -243,6 +247,7 @@ export class JiguangPush extends Common {
         messageCenter.addObserver(msgNameOnNotificationOpened, jpushApiHolder, coreApiObserver);
         messageCenter.addObserver(msgNameOnNotificationClicked, jpushApiHolder, coreApiObserver);
         messageCenter.addObserver(msgNameOnMessageReceived, jpushApiHolder, coreApiObserver);
+        console.log("add", 6, "observers for JPush core.");
     }
 
 
