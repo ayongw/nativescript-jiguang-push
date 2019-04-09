@@ -8,7 +8,7 @@
             "version": "5.2.0"
         }
     },
-    "name": "JPushPluginDemo",
+    "name": "jpush-plugin-demo",
     "version": "1.0.0",
     "description": "NativeScript Application",
     "license": "SEE LICENSE IN <your-license-filename>",

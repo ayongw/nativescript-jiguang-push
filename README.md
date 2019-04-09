@@ -1,18 +1,16 @@
-# NativeScript Jiguang push plugin
-
-Add your plugin badges here. See [nativescript-urlhandler](https://github.com/hypery2k/nativescript-urlhandler) for example.
-
-Then describe what's the purpose of your plugin. 
-
-Hist
-
-In case you develop UI plugin, this is where you can add some screenshots.
+# NativeScript Jiguang push plugin ![apple](https://cdn3.iconfinder.com/data/icons/picons-social/57/16-apple-32.png) ![android](https://cdn4.iconfinder.com/data/icons/logos-3/228/android-32.png)
+    
 
 ## (Optional) Prerequisites / Requirements
 
-Describe the prerequisites that the user need to have installed before using your plugin. See [nativescript-firebase plugin](https://github.com/eddyverbruggen/nativescript-plugin-firebase) for example.
+NO
 
 ## Installation
+
+```bash
+$ tns plugin add nativescript-urlhandler
+```
+
 need to config the android receiver
 
 ```xml
@@ -46,10 +44,10 @@ need to config the android receiver
 ## Usage 
 
 Describe any usage specifics for your plugin. Give examples for Android, iOS, Angular if needed. See [nativescript-drop-down](https://www.npmjs.com/package/nativescript-drop-down) for example.
-	
-	```javascript
-    Usage code snippets here
-    ```)
+
+```javascript
+Usage code snippets here
+```
 
 ## API
 
